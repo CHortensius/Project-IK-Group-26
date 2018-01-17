@@ -40,7 +40,7 @@ Hier kan de gebruiker zijn of haar eigen account bekijken. Hier hoort een scherm
 Hier kan de gebruiker een andermans account zien. Het enige verschil met het eigen account pagina, is dat hier geen foto’s verwijderd kunnen worden. Hier hoort een apart scherm bij.
 
 ## Views
-
+![Schets 1](https://imgur.com/a/0pBzq.jpg"Schets")
 ## Frameworks
 Flask Framework. Dit omdat wij hier al wegwijs door zijn geraakt tijdens Pset7: Finance
 

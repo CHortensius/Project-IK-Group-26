@@ -1,5 +1,5 @@
-# Project-IK-Group-26
-# Projectvoorstel IK26: Sophie, Alex, Yadé en Cas
+# Photosharing voor Fotografen
+# Projectvoorstel IK26: Sophie, Alex en Cas
 
 ## Samenvatting
 Ons idee voor een webapp is een website waar fotografen (zowel hobbyfotografie als professioneel) hun werk kunnen posten. Het idee is dat andere gebruikers tips en tricks kunnen plaatsen bij de geposte foto’s van anderen om zo fotografie naar een hoger niveau te tillen. Omdat Intstagram zichzelf heeft omgedoopt tot alle soorten foto’s en deze website nauwsluitend bedoeld is voor gebruikers die fotografie als passie hebben en meer willen leren of medefotografen tips willen geven, is het een nieuw, origineel platform die aansluit bij een grote passie van veel internetgebruikers wereldwijd.

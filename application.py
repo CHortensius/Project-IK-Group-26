@@ -40,6 +40,7 @@ def index():
     return render_template("index.html")
 
 @app.route("/upload", methods=["GET", "POST"])
+@login_required
 def upload():
     if request.method == "POST":
         UPLOAD_FOLDER = os.path.abspath("uploadedimgs/")
@@ -50,6 +51,8 @@ def upload():
 
         # add your custom code to check that the uploaded file is a valid image and not a malicious file (out-of-scope for this post)
         file.save(f)
+
+        db.execute("INSERT INTO pics (userid, url) VALUES(:userid, :url)", userid=session["user_id"], url=f)
 
         return render_template('upload.html')
 

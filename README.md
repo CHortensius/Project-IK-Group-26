@@ -1,11 +1,11 @@
-# Photosharing voor Fotografen
-# Projectvoorstel IK26: Sophie, Alex en Cas
+# Photosharing voor Fotografen: Projectvoorstel IK26: Sophie, Alex en Cas
 
 ## Samenvatting
-Ons idee voor een webapp is een website waar fotografen (zowel hobbyfotografie als professioneel) hun werk kunnen posten. Het idee is dat andere gebruikers tips en tricks kunnen plaatsen bij de geposte foto’s van anderen om zo fotografie naar een hoger niveau te tillen. Omdat Intstagram zichzelf heeft omgedoopt tot alle soorten foto’s en deze website nauwsluitend bedoeld is voor gebruikers die fotografie als passie hebben en meer willen leren of medefotografen tips willen geven, is het een nieuw, origineel platform die aansluit bij een grote passie van veel internetgebruikers wereldwijd.
+Welkom bij onze webapp "Naam website"! Een website waar je aan fotografie-skills kunt werken of andere fotografen kunt voorzien van de beste tips & tricks voor het maken van het perfecte shot. "Naam website" is handig voor iedereen die zich bezig houdt met fotografie: als hobby dan wel als professie. Door je foto hier te posten kunnen anderen je nog meer leren zodat je binnen no time het perfecte shot kunt schieten. Bovendien is het een platform waar je je creativiteit kan delen met liefhebbers. Het is een nieuw, origineel platform die aansluit bij de grote passie van fotografieliefhebbers wereldwijd. 
 
 ## Schetsen
 ![Schets 1](https://imgur.com/BhUwt4r.jpg "Schets")
+
 ## Features
 - Gebruikers moeten een account kunnen maken
 - Gebruikers moeten foto’s kunnen uploaden

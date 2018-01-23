@@ -1,7 +1,9 @@
-# Photosharing voor Fotografen: Projectvoorstel IK26: Sophie, Alex en Cas
+# Photosharing voor Fotografen: Sophie, Alex en Cas 
 
 ## Samenvatting
 Welkom bij onze webapp "Naam website"! Een website waar je aan fotografie-skills kunt werken of andere fotografen kunt voorzien van de beste tips & tricks voor het maken van het perfecte shot. "Naam website" is handig voor iedereen die zich bezig houdt met fotografie: als hobby dan wel als professie. Door je foto hier te posten kunnen anderen je nog meer leren zodat je binnen no time het perfecte shot kunt schieten. Bovendien is het een platform waar je je creativiteit kan delen met liefhebbers. Het is een nieuw, origineel platform die aansluit bij de grote passie van fotografieliefhebbers wereldwijd. 
+
+##
 
 ## Schetsen
 ![Schets 1](https://imgur.com/BhUwt4r.jpg "Schets")

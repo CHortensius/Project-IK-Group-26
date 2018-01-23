@@ -37,9 +37,7 @@
                     </div>
                     <div class="collapse navbar-collapse" id="navbar">
                         {% if session.user_id %}
-                            <ul class="nav navbar-nav navbar-left">
-                                <li><a href="{{ url_for('account') }}"><img height="30px" width="30px" src="{{ url_for('imgs', filename='account.png') }}"></a></li>
-                            </ul>
+
                             <div class="container">
                                 <nav class="navbar navbar-expand-lg navbar-light bg-light">
                                     <a class="navbar-brand" href="{{ url_for('index') }}">Sitenaam</a>

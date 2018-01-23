@@ -98,12 +98,15 @@ def register():
         elif not request.form.get("passwordconfirm"):
             return apology("must provide password confirmation")
 
+        elif not request.form.get("email"):
+            return apology("must provide e-mail adress")
+
         # controleert of de wachtwoorden matchen
         if request.form.get("password") != request.form.get("passwordconfirm"):
             return apology("passwords must match")
 
         # zet nieuwe gegevens in de database
-        result = db.execute("INSERT INTO users (username, hash) VALUES(:username, :hash)", username = request.form.get("username"), hash = pwd_context.encrypt(request.form.get("password")))
+        result = db.execute("INSERT INTO accounts (username, hash, email) VALUES(:username, :hash, :email)", username = request.form.get("username"), hash = pwd_context.encrypt(request.form.get("password")), email = request.form.get("email"))
 
         # geeft een error als de gebruikersnaam al bestaat
         if not result:

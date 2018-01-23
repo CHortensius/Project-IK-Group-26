@@ -37,6 +37,17 @@ def index():
 
     return render_template("index.html")
 
+@app.route("/upload")
+@login_required
+def upload():
+    if request.method == "POST":
+
+        #hier je shit
+
+    else:
+        return render_template("newpass.html")
+
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     """Log user in."""
@@ -56,10 +67,10 @@ def login():
             return apology("must provide password")
 
         # query database for username
-        rows = db.execute("SELECT * FROM users WHERE username = :username", username=request.form.get("username"))
+        rows = db.execute("SELECT * FROM Accounts WHERE username = :username", username=request.form.get("username"))
 
         # ensure username exists and password is correct
-        if len(rows) != 1 or not pwd_context.verify(request.form.get("password"), rows[0]["hash"]):
+        if len(rows) != 1 or request.form.get("password") != rows[0]["hash"]:
             return apology("invalid username and/or password")
 
         # remember which user has logged in
@@ -106,7 +117,7 @@ def register():
             return apology("passwords must match")
 
         # zet nieuwe gegevens in de database
-        result = db.execute("INSERT INTO accounts (username, hash, email) VALUES(:username, :hash, :email)", username = request.form.get("username"), hash = pwd_context.encrypt(request.form.get("password")), email = request.form.get("email"))
+        result = db.execute("INSERT INTO Accounts (username, hash, email) VALUES(:username, :pwdhash, :email)", username = request.form.get("username"), pwdhash = request.form.get("password"), email = request.form.get("email"))
 
         # geeft een error als de gebruikersnaam al bestaat
         if not result:
@@ -157,4 +168,4 @@ def newpass():
     else:
         return render_template("newpass.html")
 
-# Groetjes, Lex
+# Groetjes, Cas, Sooph en Lex

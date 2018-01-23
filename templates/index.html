@@ -1,5 +1,16 @@
-<html>
-    Hallo Cas!!
-    Hoestienou
-    poging 10
-</html>
+{% extends "layout.html" %}
+
+{% block title %}
+    LekkerCas
+{% endblock %}
+
+{% block main %}
+    <form action="{{ url_for('index') }}" method="post">
+        <fieldset>
+            <div class="form-group">
+                <button style="position: absolute; left: 35%; right: auto; top: 45%;" class="btn btn-default" href="{{ url_for('login') }}">Log In</button>
+                <button style="position: absolute; right: 35%; left: auto; top: 45%;" class="btn btn-default" href="{{ url_for('register') }}"">Register</button>
+            </div>
+        </fieldset>
+    </form>
+{% endblock %}

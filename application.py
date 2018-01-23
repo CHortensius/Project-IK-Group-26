@@ -13,9 +13,6 @@ import os
 # configure application
 app = Flask(__name__)
 
-UPLOAD_FOLDER = os.path.basename('/uploadedimgs/')
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
 # ensure responses aren't cached
 if app.config["DEBUG"]:
     @app.after_request
@@ -45,6 +42,8 @@ def index():
 @app.route("/upload", methods=["GET", "POST"])
 def upload():
     if request.method == "POST":
+        UPLOAD_FOLDER = os.path.abspath("uploadedimgs/")
+        app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
         file = request.files["image"]
         f = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)

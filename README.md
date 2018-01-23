@@ -1,48 +1,28 @@
-# Photosharing voor Fotografen: Sophie, Alex en Cas 
+## Photosharing voor Fotografen: Sophie, Alex en Cas 
 
-## Samenvatting
+### Samenvatting
 Welkom bij onze webapp "Naam website"! Een website waar je aan fotografie-skills kunt werken of andere fotografen kunt voorzien van de beste tips & tricks voor het maken van het perfecte shot. "Naam website" is handig voor iedereen die zich bezig houdt met fotografie: als hobby dan wel als professie. Door je foto hier te posten kunnen anderen je nog meer leren zodat je binnen no time het perfecte shot kunt schieten. Bovendien is het een platform waar je je creativiteit kan delen met liefhebbers. Het is een nieuw, origineel platform die aansluit bij de grote passie van fotografieliefhebbers wereldwijd. 
 
-##
-
-## Schetsen
-![Schets 1](https://imgur.com/BhUwt4r.jpg "Schets")
-
-## Features
+### Minimum viable product 
 - Gebruikers moeten een account kunnen maken
 - Gebruikers moeten foto’s kunnen uploaden
-- Gebruikers krijgen 3 pagina’s met foto’s te zien:
-      1. Een pagina met foto’s van gebruikers die ze volgen
-      2. Een pagina met de reacties met de meeste sterren van die dag
-      3. Een pagina om nieuwe gebruikers te ontdekken
-- Gebruikers moeten foto’s van andere gebruikers kunnen liken
-- Gebruikers moeten op foto’s kunnen reageren onder het kopje ‘TIPS’
-- Gebruikers moeten op foto’s kunnen reageren onder het kopje ‘TOPS’
+- Gebruikers moeten op foto’s kunnen reageren 
 - Gebruikers moeten andere gebruikers kunnen volgen
-- Gebruikers moeten ‘TIPS’ en ‘TOPS’ kunnen raten (1 t/m 5 sterren)
-- Gebruikers krijgen een pop-up wanneer iemand heeft gereageerd
-
-
-## Minimum viable product
-#### Noodzakelijke features
-- Gebruikers moeten een account kunnen maken
-- Gebruikers moeten foto’s kunnen uploaden
-- Gebruikers moeten op foto’s kunnen reageren onder het kopje ‘TIPS’
-- Gebruikers moeten op foto’s kunnen reageren onder het kopje ‘TOPS’
-- Een pagina met foto’s van gebruikers die ze volgen
-- Een pagina om nieuwe gebruikers te ontdekken
-- Gebruikers moeten andere gebruikers kunnen volgen
+- Gebruikers moeten een pagina met foto’s van gebruikers die ze volgen hebben (FRIENDS)
+- Gebruikers moeten een pagina met foto’s van willekeurige gebruikers hebben (DISCOVERY)
 - Gebruikers moeten foto’s van andere gebruikers kunnen liken
 
 
-
-#### Optionele features
+### Optionele features
 - Een pagina met de reacties met de meeste sterren van die dag
 - Gebruikers krijgen een pop-up wanneer iemand heeft gereageerd
 - Gebruikers moeten ‘TIPS’ en ‘TOPS’ kunnen raten (1 t/m 5 sterren)
 
-## Afhankelijkheden
-#### Databronnen
+### Schetsen
+![Schets 1](https://imgur.com/BhUwt4r.jpg "Schets")
+
+
+### Databronnen
 Nog niet bedacht
 
 #### Externe Componenten

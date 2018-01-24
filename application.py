@@ -3,6 +3,7 @@ from flask import Flask, flash, redirect, render_template, request, session, url
 from flask_session import Session
 from passlib.apps import custom_app_context as pwd_context
 from tempfile import mkdtemp
+from imgurpython import ImgurClient
 
 from helpers import *
 
@@ -43,7 +44,7 @@ def index():
 @login_required
 def upload():
     if request.method == "POST":
-        UPLOAD_FOLDER = os.path.abspath("uploadedimgs/")
+        UPLOAD_FOLDER = os.path.abspath("ImgurApi/")
         app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
         file = request.files["image"]
@@ -51,8 +52,16 @@ def upload():
 
         # add your custom code to check that the uploaded file is a valid image and not a malicious file (out-of-scope for this post)
         file.save(f)
+        client_id= '978480f212b2fba'
+        client_secret= 'f6816fc6b2874541f74c9a8ef8a94c556841d792'
+        refresh_token= '80ddfe566ccfc68403b632be352fa4c7bb53ad0e'
+        access_token= 'f8abdffaf2902a85d6ebb44af4f4d2c010d095bd'
 
-        db.execute("INSERT INTO pics (userid, url) VALUES(:userid, :url)", userid=session["user_id"], url=f)
+        client = ImgurClient(client_id, client_secret, access_token, refresh_token)
+        image = client.upload_from_path(f, anon=True)
+
+
+        db.execute("INSERT INTO pics (userid, url) VALUES(:userid, :url)", userid=session["user_id"], url=image['link'])
 
         return render_template('upload.html')
 

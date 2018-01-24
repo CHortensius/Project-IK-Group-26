@@ -108,39 +108,40 @@ def logout():
 @app.route("/register", methods=["GET", "POST"])
 def register():
     """Register user."""
+    session.clear()
 
     if request.method == "POST":
-
-        # controleert of de gebruiker alle velden heeft ingevuld
         if not request.form.get("username"):
-            return apology("must provide username")
+            return apology("Must provide username")
 
         elif not request.form.get("password"):
-            return apology("must provide password")
+            return apology("Must provide password")
 
         elif not request.form.get("passwordconfirm"):
-            return apology("must provide password confirmation")
+            return apology("Must provide Check password")
 
-        elif not request.form.get("email"):
-            return apology("must provide e-mail adress")
+        elif request.form.get("password") != request.form.get("passwordconfirm"):
+            return apology("Password doesn't match!")
 
-        # controleert of de wachtwoorden matchen
-        if request.form.get("password") != request.form.get("passwordconfirm"):
-            return apology("passwords must match")
+        password = request.form.get("password")
+        hash = pwd_context.encrypt(password)
 
-        # zet nieuwe gegevens in de database
-        result = db.execute("INSERT INTO Accounts (username, hash, email) VALUES(:username, :pwdhash, :email)", username = request.form.get("username"), pwdhash = request.form.get("password"), email = request.form.get("email"))
+        result = db.execute("INSERT INTO Accounts (username,hash) VALUES (:username, :hash)", \
+            username=request.form.get("username"), hash=hash)
 
-        # geeft een error als de gebruikersnaam al bestaat
-        if not result:
-            return apology("username already exists")
+        print(result)
+
+        if result != None:
+            return apology("Username already in use")
 
         session["user_id"] = result
 
-        # redirect user to home page
         return redirect(url_for("index"))
 
     else:
         return render_template("register.html")
+
+
+
 
 # Groetjes, Cas, Sooph en Lex

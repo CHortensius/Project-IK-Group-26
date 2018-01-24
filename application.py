@@ -131,7 +131,7 @@ def register():
 
         print(result)
 
-        if result != None:
+        if not result:
             return apology("Username already in use")
 
         session["user_id"] = result

@@ -61,8 +61,9 @@ def discover():
 def profielpagina():
 
     photoprofile = db.execute("SELECT url FROM pics WHERE userid = :id", id = session["user_id"])
-    eindfoto = photoprofile[0]["url"]
-    return render_template('profielpagina.html', eindfoto=eindfoto)
+    for photo in photoprofile:
+        eindfoto = photo["url"]
+    return render_template('profielpagina.html', photoprofile=photoprofile)
 
 
 @app.route("/upload", methods=["GET", "POST"])

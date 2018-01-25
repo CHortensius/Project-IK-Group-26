@@ -58,6 +58,14 @@ def discover():
 
     return render_template('discover.html')
 
+@app route("/profielpagina", methods=["GET" , "POST"])
+@login_required
+def profielpagina():
+
+    #Hier straks het stuk van discover, maar met where id = session id
+
+    return render_template('profielpagina.html')
+
 
 @app.route("/upload", methods=["GET", "POST"])
 @login_required

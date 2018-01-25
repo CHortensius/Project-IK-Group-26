@@ -62,9 +62,9 @@ def index():
 @login_required
 def profielpagina():
 
-    photoprofile = db.execute("SELECT url FROM pics WHERE id = :id", id = session["user_id"])
-
-    return render_template('profielpagina.html', photoprofile=photoprofile)
+    photoprofile = db.execute("SELECT url FROM pics WHERE userid = :id", id = session["user_id"])
+    eindfoto = photoprofile[0]["url"]
+    return render_template('profielpagina.html', eindfoto=eindfoto)
 
 
 @app.route("/upload", methods=["GET", "POST"])
@@ -90,7 +90,7 @@ def upload():
 
         db.execute("INSERT INTO pics (userid, url, comment) VALUES(:userid, :url, :comment)", userid=session["user_id"], url=image['link'], comment=request.form.get("comment"))
 
-        return render_template('profielpagina.html')
+        return redirect(url_for("profielpagina"))
 
     else:
         return render_template("upload.html")

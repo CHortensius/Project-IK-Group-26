@@ -40,21 +40,37 @@ def index():
 
     return render_template("index.html")
 
+@app.route("/gebruikerspagina/<clickeduser>", methods=["GET" , "POST"])
+@login_required
+def gebruikerspagina(clickeduser):
+
+    clickeduser = int(clickeduser)
+
+    photoprofile = db.execute("SELECT url, comment FROM pics WHERE userid = :id", id = clickeduser)
+    users = db.execute("SELECT username, id FROM Accounts")
+
+    username = users[clickeduser-1]["username"]
+
+    for photo in photoprofile:
+        eindfoto = photo["url"]
+        eindcomment = photo["comment"]
+    return render_template('gebruikerspagina.html', photoprofile=photoprofile, username = username, clickeduser = clickeduser)
+
 @app.route("/discover", methods=["GET", "POST"])
 @login_required
 def discover():
-#  <?php
-#   $link = mysql_connect("localhost", "root", "");
-#   mysql_select_db("accounts.db");
-#    $sql = "SELECT * FROM pics";
- #   $result = mysql_query("$sql");
- #   $row = mysql_fetch_assoc($result);
- #     mysql_close($link);
+    photoprofile = db.execute("SELECT url, comment, userid FROM pics ")
+    users = db.execute("SELECT username, id FROM Accounts")
+    userlist = {}
+    for profile in photoprofile:
+        for user in users:
+            if profile["userid"] == user["id"]:
+                userlist[profile["userid"]] = user["username"]
 
- #   header("Content-type: image/jpeg");
- #   echo $row['url'];
- #   ?>
-    return render_template('discover.html')
+    for photo in photoprofile:
+        eindfoto = photo["url"]
+        eindcomment = photo["comment"]
+    return render_template('discover.html', photoprofile=photoprofile, userlist = userlist)
 
 @app.route("/profielpagina", methods=["GET" , "POST"])
 @login_required

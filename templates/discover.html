@@ -5,7 +5,33 @@
 {% endblock %}
 
 {% block main %}
-    <div action="/discover">
-         <p>Discover hier dingen</p>
-    </div>
+    <style>
+    .rcorners {
+    border-radius: 25px;
+    border: 2px solid #000d33;
+    background: #f1f2ef;
+    padding: 20px;
+    }
+
+    .rcorners2 {
+    border-radius: 8px;
+    border: 2px solid #000d33;
+    }
+    </style>
+
+    <form action="{{ url_for('profielpagina') }}" method="get" enctype="multipart/form-data" >
+    <a class = "rcorners">New Pictures</a>
+    <br></br>
+    <br></br>
+    <br></br>
+
+    {% for photo in photoprofile %}
+    <a class = "rcorners" href="{{ url_for('gebruikerspagina',clickeduser=photo["userid"]) }}">{{userlist[photo["userid"]]}}</a>
+    <br></br>
+    <div class = "rcorners"><div class = "rcorners2"><img src={{photo["url"]}} alt="Foto 1" class = "img-rounded"></div></div>
+    <p class = "rcorners">{{photo["comment"]}}</p>
+    <br></br>
+    <br></br>
+    {% endfor %}
+    </form>
 {% endblock %}

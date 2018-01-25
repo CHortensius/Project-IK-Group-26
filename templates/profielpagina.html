@@ -5,15 +5,29 @@
 {% endblock %}
 
 {% block main %}
+    <style>
+    .rcorners {
+    border-radius: 25px;
+    border: 2px solid #000d33;
+    background: #f1f2ef;
+    padding: 20px;
+    }
+
+    .rcorners2 {
+    border-radius: 8px;
+    border: 2px solid #000d33;
+    }
+    </style>
+
     <form action="{{ url_for('profielpagina') }}" method="get" enctype="multipart/form-data" >
-    <p>Your Pictures</p>
-    <br>
+    <a class = "rcorners">Your Pictures</a>
+    <br></br>
+    <br></br>
+    <br></br>
 
     {% for photo in photoprofile %}
-    <img src={{photo["url"]}} alt="Foto 1" >
-    <p>{{photo["comment"]}}</p>
-    <br></br>
-    <br></br>
+    <div class = "rcorners"><div class = "rcorners2"><img src={{photo["url"]}} alt="Foto 1" class="img-rounded"></div></div>
+    <p class = "rcorners">{{photo["comment"]}}</p>
     <br></br>
     <br></br>
     {% endfor %}

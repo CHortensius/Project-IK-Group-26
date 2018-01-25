@@ -44,3 +44,10 @@ main td
     /* left-align tables' cells */
     text-align: left;
 }
+
+.rcorners {
+    border-radius: 25px;
+    border: 2px solid #73AD21;
+    background: #f1f2ef;
+    padding: 20px;
+}

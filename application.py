@@ -118,7 +118,7 @@ def login():
         rows = db.execute("SELECT * FROM Accounts WHERE username = :username", username=request.form.get("username"))
 
         # ensure username exists and password is correct
-        if len(rows) != 1 or request.form.get("password") != rows[0]["hash"]:
+        if len(rows) != 1 or not pwd_context.verify(request.form.get("password"), rows[0]["hash"]):
             return apology("invalid username and/or password")
 
         # remember which user has logged in

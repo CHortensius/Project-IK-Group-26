@@ -11,11 +11,11 @@
 
     {% for photo in photoprofile %}
     <img src={{photo["url"]}} alt="Foto 1" >
+    <p>{{photo["comment"]}}</p>
     <br></br>
     <br></br>
     <br></br>
     <br></br>
-
     {% endfor %}
     </form>
 {% endblock %}

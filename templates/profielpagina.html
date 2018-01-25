@@ -8,7 +8,14 @@
     <form action="{{ url_for('profielpagina') }}" method="get" enctype="multipart/form-data" >
     <p>Your Pictures</p>
     <br>
-    <img src={{eindfoto}} alt="Foto 1">
 
+    {% for photo in photoprofile %}
+    <img src={{photo["url"]}} alt="Foto 1" >
+    <br></br>
+    <br></br>
+    <br></br>
+    <br></br>
+
+    {% endfor %}
     </form>
 {% endblock %}

@@ -50,10 +50,12 @@ Via 'Friends' kan je naar een accountpagina van een andere gebruiker. Hier vindt
 #### UITLOGGEN:
 Vanaf elke pagina vindt je rechtsboven de mogelijkheid om uit te loggen. Dan return je naar de welkompagina. 
 
-### Update a.h.v. voortgangsgesprek 15 januari:
+### Updates in de loop van het project
 ##### Manier van scrollen
 We hebben ervoor gekozen om de foto’s zo groot mogelijk weer te geven zodat de hoogwaardige kwaliteit van de foto’s het beste tot z’n recht komt.  Je ziet dus één grote foto en wanneer je naar beneden scrollt zie je de volgende. Dit scrollen gaat door tot de laatste foto (je hoeft dus niet op ‘volgende’ of ‘vorige’ te drukken)
 ##### Accountgegevens
  We vragen de gebruikers om een gebruikersnaam, een wachtwoord en een bevestiging van het wachtwoord.  
-##### 8. Commenten
+##### Commenten
  Een comment achterlaten bij een foto gaat als volgt: Je krijgt een optie om een comment te schrijven. Hieronder zie je een +: naast het + je kun je alle dingen aan de foto die je goed vindt beschrijven. Het zelfde geldt voor het - teken die onder het + teken staat. Als je geen pluspunten of juist geen minpunten hebt, laat je het leeg.
+ 
+ 

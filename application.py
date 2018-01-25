@@ -60,9 +60,11 @@ def discover():
 @login_required
 def profielpagina():
 
-    photoprofile = db.execute("SELECT url FROM pics WHERE userid = :id", id = session["user_id"])
+    photoprofile = db.execute("SELECT url, comment FROM pics WHERE userid = :id", id = session["user_id"])
+    #comments = db.execute("SELECT comment FROM pics WHERE userid = :id", id = session["user_id"])
     for photo in photoprofile:
         eindfoto = photo["url"]
+        eindcomment = photo["comment"]
     return render_template('profielpagina.html', photoprofile=photoprofile)
 
 

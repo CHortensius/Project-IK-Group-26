@@ -40,6 +40,25 @@ def index():
 
     return render_template("index.html")
 
+@app.route("/discover", methods=["GET", "POST"])
+@login_required
+def discover():
+    <?php
+    $link = mysql_connect("localhost", "root", "");
+    mysql_select_db("accounts.db");
+    $sql = "SELECT * FROM pics";
+    $result = mysql_query("$sql");
+    $row = mysql_fetch_assoc($result);
+      mysql_close($link);
+
+    header("Content-type: image/jpeg");
+    echo $row['url'];
+    ?>
+
+
+    return render_template('discover.html')
+
+
 @app.route("/upload", methods=["GET", "POST"])
 @login_required
 def upload():
@@ -61,7 +80,7 @@ def upload():
         image = client.upload_from_path(f, anon=True)
 
 
-        db.execute("INSERT INTO pics (userid, url) VALUES(:userid, :url)", userid=session["user_id"], url=image['link'])
+        db.execute("INSERT INTO pics (userid, url, comment) VALUES(:userid, :url, :comment)", userid=session["user_id"], url=image['link'], comment=request.form.get("comment"))
 
         return render_template('upload.html')
 

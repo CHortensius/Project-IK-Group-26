@@ -40,31 +40,31 @@ def index():
 
     return render_template("index.html")
 
-@app.route("/discover", methods=["GET", "POST"])
-@login_required
-def discover():
-    <?php
-    $link = mysql_connect("localhost", "root", "");
-    mysql_select_db("accounts.db");
-    $sql = "SELECT * FROM pics";
-    $result = mysql_query("$sql");
-    $row = mysql_fetch_assoc($result);
-      mysql_close($link);
+#@app.route("/discover", methods=["GET", "POST"])
+#@login_required
+#def discover():
+#  <?php
+#   $link = mysql_connect("localhost", "root", "");
+#   mysql_select_db("accounts.db");
+#    $sql = "SELECT * FROM pics";
+ #   $result = mysql_query("$sql");
+ #   $row = mysql_fetch_assoc($result);
+ #     mysql_close($link);
 
-    header("Content-type: image/jpeg");
-    echo $row['url'];
-    ?>
+ #   header("Content-type: image/jpeg");
+ #   echo $row['url'];
+ #   ?>
 
 
-    return render_template('discover.html')
+  #  return render_template('discover.html')
 
-@app route("/profielpagina", methods=["GET" , "POST"])
+@app.route("/profielpagina", methods=["GET" , "POST"])
 @login_required
 def profielpagina():
 
-    #Hier straks het stuk van discover, maar met where id = session id
+    photoprofile = db.execute("SELECT url FROM pics WHERE id = :id", id = session["user_id"])
 
-    return render_template('profielpagina.html')
+    return render_template('profielpagina.html', photoprofile=photoprofile)
 
 
 @app.route("/upload", methods=["GET", "POST"])
@@ -90,7 +90,7 @@ def upload():
 
         db.execute("INSERT INTO pics (userid, url, comment) VALUES(:userid, :url, :comment)", userid=session["user_id"], url=image['link'], comment=request.form.get("comment"))
 
-        return render_template('upload.html')
+        return render_template('profielpagina.html')
 
     else:
         return render_template("upload.html")
@@ -164,8 +164,6 @@ def register():
 
         result = db.execute("INSERT INTO Accounts (username,hash) VALUES (:username, :hash)", \
             username=request.form.get("username"), hash=hash)
-
-        print(result)
 
         if not result:
             return apology("Username already in use")

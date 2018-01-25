@@ -6,11 +6,8 @@
 
 {% block main %}
     <a>Your pictures</a>
-    <form action="/upload" method="post" enctype="multipart/form-data" >
-        <span class="btn btn-default btn-file">
-            Browse <input type="file" name="image">
-        </span>
+    <form action="/profielpagina" method="post" enctype="multipart/form-data" >
+        ${{photoprofile}}
 
-        <input type="submit" value="Upload your image" class="btn btn-primary">
     </form>
 {% endblock %}

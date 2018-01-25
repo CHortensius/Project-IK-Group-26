@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Log In
+    Upload
 {% endblock %}
 
 {% block main %}
@@ -10,7 +10,9 @@
         <span class="btn btn-default btn-file">
             Browse <input type="file" name="image">
         </span>
-
+        <br>
+        <textarea rows="4" cols="50" name="comment">Description</textarea>
+        <br>
         <input type="submit" value="Upload your image" class="btn btn-primary">
     </form>
 {% endblock %}

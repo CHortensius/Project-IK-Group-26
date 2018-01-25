@@ -12,9 +12,6 @@ Welkom bij onze webapp "Naam website"! Een website waar je aan fotografie-skills
 - Gebruikers moeten een pagina met foto’s van willekeurige gebruikers hebben (DISCOVERY)
 - Gebruikers moeten foto’s van andere gebruikers kunnen liken
 
-### Schetsen
-![Schets 1](https://imgur.com/BhUwt4r.jpg "Schets")
-
 ### Externe Componenten
 - Bootstrap: Gebruiken we voor een CSS opmaak van onze website
 - Imgur API: Om de foto's die worden geupload op te slaan en de URL te kunnen opslaan in de database
@@ -51,11 +48,14 @@ Via 'Friends' kan je naar een accountpagina van een andere gebruiker. Hier vindt
 Vanaf elke pagina vindt je rechtsboven de mogelijkheid om uit te loggen. Dan return je naar de welkompagina. 
 
 ### Updates in de loop van het project
-##### Manier van scrollen
+##### MANIER VAN SCROLLEN
 We hebben ervoor gekozen om de foto’s zo groot mogelijk weer te geven zodat de hoogwaardige kwaliteit van de foto’s het beste tot z’n recht komt.  Je ziet dus één grote foto en wanneer je naar beneden scrollt zie je de volgende. Dit scrollen gaat door tot de laatste foto (je hoeft dus niet op ‘volgende’ of ‘vorige’ te drukken)
-##### Accountgegevens
+##### ACCOUNTGEGEVENS
  We vragen de gebruikers om een gebruikersnaam, een wachtwoord en een bevestiging van het wachtwoord.  
-##### Commenten
+##### COMMENTEN
  Een comment achterlaten bij een foto gaat als volgt: Je krijgt een optie om een comment te schrijven. Hieronder zie je een +: naast het + je kun je alle dingen aan de foto die je goed vindt beschrijven. Het zelfde geldt voor het - teken die onder het + teken staat. Als je geen pluspunten of juist geen minpunten hebt, laat je het leeg.
- 
+##### LIKEN
+Liken a.h.v. JavaScript zodat de pagina niet bij elke like gerefreshed moet worden. 
+
+
  

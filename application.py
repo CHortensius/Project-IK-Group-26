@@ -40,9 +40,9 @@ def index():
 
     return render_template("index.html")
 
-#@app.route("/discover", methods=["GET", "POST"])
-#@login_required
-#def discover():
+@app.route("/discover", methods=["GET", "POST"])
+@login_required
+def discover():
 #  <?php
 #   $link = mysql_connect("localhost", "root", "");
 #   mysql_select_db("accounts.db");
@@ -54,9 +54,7 @@ def index():
  #   header("Content-type: image/jpeg");
  #   echo $row['url'];
  #   ?>
-
-
-  #  return render_template('discover.html')
+    return render_template('discover.html')
 
 @app.route("/profielpagina", methods=["GET" , "POST"])
 @login_required
@@ -125,7 +123,7 @@ def login():
         session["user_id"] = rows[0]["id"]
 
         # redirect user to home page
-        return redirect(url_for("index"))
+        return redirect(url_for("discover"))
 
     # else if user reached route via GET (as by clicking a link or via redirect)
     else:
@@ -170,7 +168,7 @@ def register():
 
         session["user_id"] = result
 
-        return redirect(url_for("index"))
+        return redirect(url_for("discover"))
 
     else:
         return render_template("register.html")

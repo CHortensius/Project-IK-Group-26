@@ -6,13 +6,10 @@ from tempfile import mkdtemp
 from imgurpython import ImgurClient
 
 from helpers import *
-from secret import *
 
 import shutil
 import time
 import os
-
-from PIL import Image
 
 # configure application
 app = Flask(__name__)
@@ -41,43 +38,28 @@ db = SQL("sqlite:///accounts.db")
 @app.route("/")
 def index():
 
-    return redirect(url_for('discover'))
+    return render_template("index.html")
 
-@app.route("/imagepagina/<clickedpic>/<clickeduser>", methods=["GET" , "POST"])
-def imagepagina(clickedpic, clickeduser):
-
-    clickedpic = int(clickedpic)
-
-    photo = db.execute("SELECT * FROM pics WHERE picid = :id", id = clickedpic)
-
-    users = db.execute("SELECT username, id FROM Accounts")
-    user = ""
-    for user in users:
-        if clickeduser == user["id"]:
-            userlist[clickeduser] = str(user["username"])
-
-
-
-    return render_template('imagepagina.html', photo=photo, username = user, clickedpic = clickedpic)
-
-@app.route("/gebruikerspagina/<clickeduser>/<clickedname>", methods=["GET" , "POST"])
-def gebruikerspagina(clickeduser, clickedname):
+@app.route("/gebruikerspagina/<clickeduser>", methods=["GET" , "POST"])
+@login_required
+def gebruikerspagina(clickeduser):
 
     clickeduser = int(clickeduser)
 
-    photoprofile = db.execute("SELECT * FROM pics WHERE userid = :id", id = clickeduser)
+    photoprofile = db.execute("SELECT url, comment FROM pics WHERE userid = :id", id = clickeduser)
+    users = db.execute("SELECT username, id FROM Accounts")
 
-    #username = users[clickeduser-1]["username"]
+    username = users[clickeduser-1]["username"]
 
     for photo in photoprofile:
         eindfoto = photo["url"]
         eindcomment = photo["comment"]
-        eindid = eindcomment = photo["picid"]
-    return render_template('gebruikerspagina.html', photoprofile=photoprofile, username = clickedname, clickeduser = clickeduser)
+    return render_template('gebruikerspagina.html', photoprofile=photoprofile, username = username, clickeduser = clickeduser)
 
 @app.route("/discover", methods=["GET", "POST"])
+@login_required
 def discover():
-    photoprofile = db.execute("SELECT * FROM pics ")
+    photoprofile = db.execute("SELECT url, comment, userid FROM pics ")
     users = db.execute("SELECT username, id FROM Accounts")
     userlist = {}
     for profile in photoprofile:
@@ -88,58 +70,42 @@ def discover():
     for photo in photoprofile:
         eindfoto = photo["url"]
         eindcomment = photo["comment"]
-        eindid = eindcomment = photo["picid"]
     return render_template('discover.html', photoprofile=photoprofile, userlist = userlist)
 
 @app.route("/profielpagina", methods=["GET" , "POST"])
 @login_required
 def profielpagina():
 
-    userid = session["user_id"]
-    photoprofile = db.execute("SELECT * FROM pics WHERE userid = :id", id = userid)
+    photoprofile = db.execute("SELECT url, comment FROM pics WHERE userid = :id", id = session["user_id"])
     #comments = db.execute("SELECT comment FROM pics WHERE userid = :id", id = session["user_id"])
     for photo in photoprofile:
         eindfoto = photo["url"]
         eindcomment = photo["comment"]
-    return render_template('profielpagina.html', photoprofile=photoprofile, user = userid)
+    return render_template('profielpagina.html', photoprofile=photoprofile)
 
 
 @app.route("/upload", methods=["GET", "POST"])
 @login_required
 def upload():
     if request.method == "POST":
-        if not request.form.get("title"):
-            return apology("must provide title")
-
-        if not request.form.get("title"):
-            return apology("must provide description")
-
-
         UPLOAD_FOLDER = os.path.abspath("ImgurApi/")
         app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
         file = request.files["image"]
-
-        if not file:
-            return apology("I don't see an image here...")
-
-        try:
-            im=Image.open(file)
-        except IOError:
-            return apology("That's not an image!")
-
         f = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
 
+        # add your custom code to check that the uploaded file is a valid image and not a malicious file (out-of-scope for this post)
         file.save(f)
         client_id= '978480f212b2fba'
-        client_secret= secret_code
+        client_secret= 'f6816fc6b2874541f74c9a8ef8a94c556841d792'
         refresh_token= '80ddfe566ccfc68403b632be352fa4c7bb53ad0e'
         access_token= 'f8abdffaf2902a85d6ebb44af4f4d2c010d095bd'
 
         client = ImgurClient(client_id, client_secret, access_token, refresh_token)
         image = client.upload_from_path(f, anon=True)
 
-        db.execute("INSERT INTO pics (userid, url, comment, title) VALUES(:userid, :url, :comment, :title)", userid=session["user_id"], url=image['link'], comment=request.form.get("comment"), title=request.form.get("title"))
+
+        db.execute("INSERT INTO pics (userid, url, comment) VALUES(:userid, :url, :comment)", userid=session["user_id"], url=image['link'], comment=request.form.get("comment"))
 
         return redirect(url_for("profielpagina"))
 

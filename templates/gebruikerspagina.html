@@ -26,6 +26,7 @@
 
     {% for photo in photoprofile %}
     <div class = "rcorners"><a href="{{ url_for('imagepagina',clickedpic=photo["picid"],clickeduser = clickeduser) }}" class = "rcorners2"><img src="{{photo["url"]}}" alt="Foto 1" class = "img-rounded"></a></div>
+    <p class = "rcorners">{{photo["title"]}}</p>
     <p class = "rcorners">{{photo["comment"]}}</p>
     <br></br>
     <br></br>

@@ -29,6 +29,7 @@
     <a class = "rcorners" href="{{ url_for('gebruikerspagina',clickeduser=photo["userid"], clickedname=userlist[photo["userid"]]) }}">{{ userlist[photo["userid"]] }}</a>
     <br></br>
     <div class = "rcorners"><a href="{{ url_for('imagepagina',clickedpic=photo["picid"], clickeduser=photo["userid"]) }}" class = "rcorners2"><img src="{{photo["url"]}}" alt="Foto 1" class = "img-rounded"></a></div>
+    <p class = "rcorners"><b>{{photo["title"]}}</b></p>
     <p class = "rcorners">{{photo["comment"]}}</p>
     <br></br>
     <br></br>

@@ -24,7 +24,7 @@
     <br></br>
     <br></br>
 
-    <form action="{{ url_for('gebruikerspagina',clickeduser=clickeduser, clickedname=username) }}" class="form" method="post">
+    <form action="{{ url_for('follow',clickeduser=clickeduser, clickedname=username) }}" class="form" method="post">
     {% if followcheck == True %}
         <input class="btn btn--sm type--uppercase" name="submit" style="background: #e74c3c;border-color: #c0392b;color:white;width:100px;" type="submit" value="Unfollow">
     {%else%}

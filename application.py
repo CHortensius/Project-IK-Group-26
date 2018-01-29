@@ -65,19 +65,9 @@ def imagepagina(clickedpic, clickeduser):
 
     return render_template('imagepagina.html', photo=photo, username = user, clickedpic = clickedpic)
 
-@app.route("/gebruikerspagina/<clickeduser>/<clickedname>", methods=["GET" , "POST"])
-def gebruikerspagina(clickeduser, clickedname):
-
-    clickeduser = int(clickeduser)
-
-    photoprofile = db.execute("SELECT * FROM pics WHERE userid = :id", id = clickeduser)
-
-    #username = users[clickeduser-1]["username"]
-
-    # followcheck #
-
+@app.route("/follow/<clickeduser>/<clickedname>", methods=["GET" , "POST"])
+def follow(clickeduser,clickedname):
     result = db.execute("SELECT * FROM follow WHERE user_id = :userid AND following_id = :followingid", userid = session["user_id"], followingid = clickeduser )
-    print(result)
     if result == []:
         followcheck = False
     else:
@@ -89,11 +79,29 @@ def gebruikerspagina(clickeduser, clickedname):
     elif followcheck == True:
         db.execute("DELETE FROM follow WHERE user_id = :userid AND following_id = :followingid",userid = session["user_id"],followingid = clickeduser)
 
+    return redirect(url_for('gebruikerspagina',clickeduser=clickeduser,clickedname = clickedname))
+
+@app.route("/gebruikerspagina/<clickeduser>/<clickedname>", methods=["GET" , "POST"])
+def gebruikerspagina(clickeduser, clickedname):
+
+    clickeduser = int(clickeduser)
+
+    photoprofile = db.execute("SELECT * FROM pics WHERE userid = :id", id = clickeduser)
+
+    if session["user_id"] == True:
+        result = db.execute("SELECT * FROM follow WHERE user_id = :userid AND following_id = :followingid", userid = session["user_id"], followingid = clickeduser )
+        if result == []:
+            followcheck = False
+        else:
+            followcheck = True
+    else:
+        followcheck = False
+
     for photo in photoprofile:
         eindfoto = photo["url"]
         eindcomment = photo["comment"]
         eindid = eindcomment = photo["picid"]
-    return render_template('gebruikerspagina.html', photoprofile=photoprofile, username = clickedname, clickeduser = clickeduser, followcheck = followcheck)
+    return render_template('gebruikerspagina.html', photoprofile=photoprofile, username = clickedname, clickeduser = clickeduser,followcheck = followcheck)
 
 @app.route("/discover", methods=["GET", "POST"])
 def discover():

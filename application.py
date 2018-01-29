@@ -43,6 +43,11 @@ def index():
 
     return redirect(url_for('discover'))
 
+@app.route("/buttontest")
+def buttontest():
+
+    return render_template('buttontest.html')
+
 @app.route("/imagepagina/<clickedpic>/<clickeduser>", methods=["GET" , "POST"])
 def imagepagina(clickedpic, clickeduser):
 
@@ -145,12 +150,6 @@ def upload():
 
     else:
         return render_template("upload.html")
-
-@app.route("/upload", methods=["GET", "POST"])
-@login_required
-def volgen():
-
-
 
 @app.route("/login", methods=["GET", "POST"])
 def login():

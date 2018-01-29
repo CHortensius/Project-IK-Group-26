@@ -41,14 +41,22 @@ def index():
 
     return render_template("index.html")
 
-@app.route("/imagepagina/<clickedpic>/<clickeduser>/<clickedname>", methods=["GET" , "POST"])
-def imagepagina(clickedpic, clickeduser, clickedname):
+@app.route("/imagepagina/<clickedpic>/<clickeduser>", methods=["GET" , "POST"])
+def imagepagina(clickedpic, clickeduser):
 
     clickedpic = int(clickedpic)
 
     photo = db.execute("SELECT url, comment, userid FROM pics WHERE picid = :id", id = clickedpic)
 
-    return render_template('imagepagina.html', photo=photo, username = clickedname, clickedpic = clickedpic)
+    users = db.execute("SELECT username, id FROM Accounts")
+    user = ""
+    for user in users:
+        if clickeduser == user["id"]:
+            userlist[clickeduser] = str(user["username"])
+
+
+
+    return render_template('imagepagina.html', photo=photo, username = user, clickedpic = clickedpic)
 
 @app.route("/gebruikerspagina/<clickeduser>/<clickedname>", methods=["GET" , "POST"])
 def gebruikerspagina(clickeduser, clickedname):
@@ -85,12 +93,13 @@ def discover():
 @login_required
 def profielpagina():
 
-    photoprofile = db.execute("SELECT url, comment FROM pics WHERE userid = :id", id = session["user_id"])
+    userid = session["user_id"]
+    photoprofile = db.execute("SELECT url, comment FROM pics WHERE userid = :id", id = userid)
     #comments = db.execute("SELECT comment FROM pics WHERE userid = :id", id = session["user_id"])
     for photo in photoprofile:
         eindfoto = photo["url"]
         eindcomment = photo["comment"]
-    return render_template('profielpagina.html', photoprofile=photoprofile)
+    return render_template('profielpagina.html', photoprofile=photoprofile, user = userid)
 
 
 @app.route("/upload", methods=["GET", "POST"])

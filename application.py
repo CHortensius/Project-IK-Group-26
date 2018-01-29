@@ -67,11 +67,26 @@ def gebruikerspagina(clickeduser, clickedname):
 
     #username = users[clickeduser-1]["username"]
 
+    # followcheck #
+
+    result = db.execute("SELECT * FROM follow WHERE user_id = :userid AND following_id = :followingid", userid = session["user_id"], followingid = clickeduser )
+    print(result)
+    if result == []:
+        followcheck = False
+    else:
+        followcheck = True
+
+    ###############
+    if followcheck == False:
+        db.execute("INSERT INTO follow(user_id,following_id) VALUES(:user_id,:following_id)",user_id=session["user_id"],following_id=clickeduser)
+    elif followcheck == True:
+        db.execute("DELETE FROM follow WHERE user_id = :userid AND following_id = :followingid",userid = session["user_id"],followingid = clickeduser)
+
     for photo in photoprofile:
         eindfoto = photo["url"]
         eindcomment = photo["comment"]
         eindid = eindcomment = photo["picid"]
-    return render_template('gebruikerspagina.html', photoprofile=photoprofile, username = clickedname, clickeduser = clickeduser)
+    return render_template('gebruikerspagina.html', photoprofile=photoprofile, username = clickedname, clickeduser = clickeduser, followcheck = followcheck)
 
 @app.route("/discover", methods=["GET", "POST"])
 def discover():
@@ -129,10 +144,6 @@ def upload():
 
     else:
         return render_template("upload.html")
-
-@app.route("/upload", methods=["GET", "POST"])
-@login_required
-def volgen():
 
 
 

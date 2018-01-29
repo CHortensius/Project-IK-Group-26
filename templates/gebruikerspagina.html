@@ -20,10 +20,17 @@
     </style>
 
     <a class = "rcorners">{{username}}'s pictures</a>
-    <input type="submit" value="Follow" class="rcorners">
     <br></br>
     <br></br>
     <br></br>
+
+    <form action="{{ url_for('gebruikerspagina',clickeduser=clickeduser, clickedname=username) }}" class="form" method="post">
+    {% if followcheck == True %}
+        <input class="btn btn--sm type--uppercase" name="submit" style="background: #e74c3c;border-color: #c0392b;color:white;width:100px;" type="submit" value="Unfollow">
+    {%else%}
+        <input class="btn btn--sm type--uppercase" name="submit" style="background: #4a90e2;border-color: #4a90e2;color:white;width:100px;" type="submit" value="Follow">
+    {%endif%}
+    </form>
 
     {% for photo in photoprofile %}
     <div class = "rcorners"><a href="{{ url_for('imagepagina',clickedpic=photo["picid"],clickeduser = clickeduser) }}" class = "rcorners2"><img src="{{photo["url"]}}" alt="Foto 1" class = "img-rounded"></a></div>

@@ -6,6 +6,7 @@ from tempfile import mkdtemp
 from imgurpython import ImgurClient
 
 from helpers import *
+from secret import *
 
 import shutil
 import time
@@ -97,7 +98,7 @@ def upload():
         # add your custom code to check that the uploaded file is a valid image and not a malicious file (out-of-scope for this post)
         file.save(f)
         client_id= '978480f212b2fba'
-        client_secret= 'f6816fc6b2874541f74c9a8ef8a94c556841d792'
+        client_secret= secret_code
         refresh_token= '80ddfe566ccfc68403b632be352fa4c7bb53ad0e'
         access_token= 'f8abdffaf2902a85d6ebb44af4f4d2c010d095bd'
 

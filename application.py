@@ -12,6 +12,8 @@ import shutil
 import time
 import os
 
+from PIL import Image
+
 # configure application
 app = Flask(__name__)
 
@@ -39,14 +41,19 @@ db = SQL("sqlite:///accounts.db")
 @app.route("/")
 def index():
 
-    return render_template("index.html")
+    return redirect(url_for('discover'))
+
+@app.route("/buttontest")
+def buttontest():
+
+    return render_template('buttontest.html')
 
 @app.route("/imagepagina/<clickedpic>/<clickeduser>", methods=["GET" , "POST"])
 def imagepagina(clickedpic, clickeduser):
 
     clickedpic = int(clickedpic)
 
-    photo = db.execute("SELECT url, comment, userid FROM pics WHERE picid = :id", id = clickedpic)
+    photo = db.execute("SELECT * FROM pics WHERE picid = :id", id = clickedpic)
 
     users = db.execute("SELECT username, id FROM Accounts")
     user = ""
@@ -63,7 +70,7 @@ def gebruikerspagina(clickeduser, clickedname):
 
     clickeduser = int(clickeduser)
 
-    photoprofile = db.execute("SELECT url, comment, picid FROM pics WHERE userid = :id", id = clickeduser)
+    photoprofile = db.execute("SELECT * FROM pics WHERE userid = :id", id = clickeduser)
 
     #username = users[clickeduser-1]["username"]
 
@@ -90,7 +97,7 @@ def gebruikerspagina(clickeduser, clickedname):
 
 @app.route("/discover", methods=["GET", "POST"])
 def discover():
-    photoprofile = db.execute("SELECT url, comment, picid, userid FROM pics ")
+    photoprofile = db.execute("SELECT * FROM pics ")
     users = db.execute("SELECT username, id FROM Accounts")
     userlist = {}
     for profile in photoprofile:
@@ -109,7 +116,7 @@ def discover():
 def profielpagina():
 
     userid = session["user_id"]
-    photoprofile = db.execute("SELECT url, comment FROM pics WHERE userid = :id", id = userid)
+    photoprofile = db.execute("SELECT * FROM pics WHERE userid = :id", id = userid)
     #comments = db.execute("SELECT comment FROM pics WHERE userid = :id", id = session["user_id"])
     for photo in photoprofile:
         eindfoto = photo["url"]
@@ -121,13 +128,28 @@ def profielpagina():
 @login_required
 def upload():
     if request.method == "POST":
+        if not request.form.get("title"):
+            return apology("must provide title")
+
+        if not request.form.get("title"):
+            return apology("must provide description")
+
+
         UPLOAD_FOLDER = os.path.abspath("ImgurApi/")
         app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
         file = request.files["image"]
+
+        if not file:
+            return apology("I don't see an image here...")
+
+        try:
+            im=Image.open(file)
+        except IOError:
+            return apology("That's not an image!")
+
         f = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
 
-        # add your custom code to check that the uploaded file is a valid image and not a malicious file (out-of-scope for this post)
         file.save(f)
         client_id= '978480f212b2fba'
         client_secret= secret_code
@@ -137,15 +159,12 @@ def upload():
         client = ImgurClient(client_id, client_secret, access_token, refresh_token)
         image = client.upload_from_path(f, anon=True)
 
-
-        db.execute("INSERT INTO pics (userid, url, comment) VALUES(:userid, :url, :comment)", userid=session["user_id"], url=image['link'], comment=request.form.get("comment"))
+        db.execute("INSERT INTO pics (userid, url, comment, title) VALUES(:userid, :url, :comment, :title)", userid=session["user_id"], url=image['link'], comment=request.form.get("comment"), title=request.form.get("title"))
 
         return redirect(url_for("profielpagina"))
 
     else:
         return render_template("upload.html")
-
-
 
 @app.route("/login", methods=["GET", "POST"])
 def login():

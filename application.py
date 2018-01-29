@@ -40,26 +40,33 @@ def index():
 
     return render_template("index.html")
 
-@app.route("/gebruikerspagina/<clickeduser>", methods=["GET" , "POST"])
-@login_required
-def gebruikerspagina(clickeduser):
+@app.route("/imagepagina/<clickedpic>/<clickeduser>/<clickedname>", methods=["GET" , "POST"])
+def imagepagina(clickedpic, clickeduser, clickedname):
+
+    clickedpic = int(clickedpic)
+
+    photo = db.execute("SELECT url, comment, userid FROM pics WHERE picid = :id", id = clickedpic)
+
+    return render_template('imagepagina.html', photo=photo, username = clickedname, clickedpic = clickedpic)
+
+@app.route("/gebruikerspagina/<clickeduser>/<clickedname>", methods=["GET" , "POST"])
+def gebruikerspagina(clickeduser, clickedname):
 
     clickeduser = int(clickeduser)
 
-    photoprofile = db.execute("SELECT url, comment FROM pics WHERE userid = :id", id = clickeduser)
-    users = db.execute("SELECT username, id FROM Accounts")
+    photoprofile = db.execute("SELECT url, comment, picid FROM pics WHERE userid = :id", id = clickeduser)
 
-    username = users[clickeduser-1]["username"]
+    #username = users[clickeduser-1]["username"]
 
     for photo in photoprofile:
         eindfoto = photo["url"]
         eindcomment = photo["comment"]
-    return render_template('gebruikerspagina.html', photoprofile=photoprofile, username = username, clickeduser = clickeduser)
+        eindid = eindcomment = photo["picid"]
+    return render_template('gebruikerspagina.html', photoprofile=photoprofile, username = clickedname, clickeduser = clickeduser)
 
 @app.route("/discover", methods=["GET", "POST"])
-@login_required
 def discover():
-    photoprofile = db.execute("SELECT url, comment, userid FROM pics ")
+    photoprofile = db.execute("SELECT url, comment, picid, userid FROM pics ")
     users = db.execute("SELECT username, id FROM Accounts")
     userlist = {}
     for profile in photoprofile:
@@ -70,6 +77,7 @@ def discover():
     for photo in photoprofile:
         eindfoto = photo["url"]
         eindcomment = photo["comment"]
+        eindid = eindcomment = photo["picid"]
     return render_template('discover.html', photoprofile=photoprofile, userlist = userlist)
 
 @app.route("/profielpagina", methods=["GET" , "POST"])

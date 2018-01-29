@@ -140,7 +140,7 @@ def upload():
         if not request.form.get("title"):
             return apology("must provide title")
 
-        if not request.form.get("title"):
+        if not request.form.get("comment"):
             return apology("must provide description")
 
 
@@ -149,12 +149,12 @@ def upload():
 
         file = request.files["image"]
 
-        if not file:
-            return apology("I don't see an image here...")
-        try:
-            im=Image.open(file)
-        except IOError:
-            return apology("That's not an image!")
+        #if not file:
+            #return apology("I don't see an image here...")
+        #try:
+            #im=Image.open(file)
+        #except IOError:
+            #return apology("That's not an image!")
 
         f = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
 
@@ -165,12 +165,12 @@ def upload():
         access_token= 'f8abdffaf2902a85d6ebb44af4f4d2c010d095bd'
 
         client = ImgurClient(client_id, client_secret, access_token, refresh_token)
-        image = client.upload_from_path(f, anon=True)
+        image = client.upload_from_path(f,anon=True)
 
         db.execute("INSERT INTO pics (userid, url, comment, title) VALUES(:userid, :url, :comment, :title)", userid=session["user_id"], url=image['link'], comment=request.form.get("comment"), title=request.form.get("title"))
         picid = db.execute("SELECT picid FROM pics WHERE url = :url", url = image["link"])
 
-        return redirect(url_for('imagepagina.html', clickedpic = picid[0]["picid"] , clickeduser = userid))
+        return redirect(url_for('imagepagina', clickedpic = picid[0]["picid"] , clickeduser = session["user_id"]))
 
     else:
         return render_template("upload.html")

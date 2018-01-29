@@ -22,26 +22,4 @@
     <div class = "rcorners"><div class = "rcorners2"><img src={{photo[0]["url"]}} alt="Foto 1" class = "img-rounded"></div></div>
     <p class = "rcorners"><b>{{ photo[0]["title"] }}</b></p>
     <p class = "rcorners">{{photo[0]["comment"]}}</p>
-
-    <form action="{{ url_for('postcomment.py') }}" method="post">
-        <fieldset>
-            <p><b>Comments</b></p>
-            <div class="form-group">
-                <input autocomplete="off" autofocus class="form-control" name="title" placeholder="Subject" type="text"/>
-            </div>
-            <div class="form-group">
-                <input class="form-control" name="comment" type="text"/>
-            </div>
-            <div class="form-group">
-                <input class="form-control" name="poscomment" placeholder="Positive notes" type="text"/>
-            </div>
-            <div class="form-group">
-                <input class="form-control" name="negcomment" placeholder="Negative notes" type="text"/>
-            </div>
-            <div class="form-group">
-                <button class="btn btn-default" type="submit">Submit</button>
-            </div>
-            <a href="{{ url_for("register") }}">Register</a>
-        </fieldset>
-    </form>
 {% endblock %}

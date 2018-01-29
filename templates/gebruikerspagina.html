@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    {{username}}
+{% endblock %}
+
+{% block main %}
+    <style>
+    .rcorners {
+    border-radius: 25px;
+    border: 2px solid #000d33;
+    background: #f1f2ef;
+    padding: 20px;
+    }
+
+    .rcorners2 {
+    border-radius: 8px;
+    border: 2px solid #000d33;
+    }
+    </style>
+
+    <a class = "rcorners">{{username}}'s pictures</a>
+    <br></br>
+    <br></br>
+    <br></br>
+
+    {% for photo in photoprofile %}
+    <div class = "rcorners"><div class = "rcorners2"><img src={{photo["url"]}} alt="Foto 1" class = "img-rounded"></div></div>
+    <p class = "rcorners">{{photo["comment"]}}</p>
+    <br></br>
+    <br></br>
+    {% endfor %}
+{% endblock %}

@@ -130,6 +130,11 @@ def upload():
     else:
         return render_template("upload.html")
 
+@app.route("/upload", methods=["GET", "POST"])
+@login_required
+def volgen():
+
+
 
 @app.route("/login", methods=["GET", "POST"])
 def login():

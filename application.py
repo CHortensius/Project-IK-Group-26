@@ -11,6 +11,7 @@ from secret import *
 import shutil
 import time
 import os
+import secret
 
 from PIL import Image
 
@@ -66,6 +67,7 @@ def imagepagina(clickedpic, clickeduser):
     return render_template('imagepagina.html', photo=photo, username = user, clickedpic = clickedpic)
 
 @app.route("/follow/<clickeduser>/<clickedname>", methods=["GET" , "POST"])
+@login_required
 def follow(clickeduser,clickedname):
     result = db.execute("SELECT * FROM follow WHERE user_id = :userid AND following_id = :followingid", userid = session["user_id"], followingid = clickeduser )
     if result == []:
@@ -88,14 +90,13 @@ def gebruikerspagina(clickeduser, clickedname):
 
     photoprofile = db.execute("SELECT * FROM pics WHERE userid = :id", id = clickeduser)
 
-    if session["user_id"] == True:
+    followcheck = False
+
+    if session.get("user_id") is not None:
         result = db.execute("SELECT * FROM follow WHERE user_id = :userid AND following_id = :followingid", userid = session["user_id"], followingid = clickeduser )
-        if result == []:
-            followcheck = False
-        else:
+        if result != []:
             followcheck = True
-    else:
-        followcheck = False
+
 
     for photo in photoprofile:
         eindfoto = photo["url"]
@@ -150,7 +151,6 @@ def upload():
 
         if not file:
             return apology("I don't see an image here...")
-
         try:
             im=Image.open(file)
         except IOError:
@@ -168,8 +168,9 @@ def upload():
         image = client.upload_from_path(f, anon=True)
 
         db.execute("INSERT INTO pics (userid, url, comment, title) VALUES(:userid, :url, :comment, :title)", userid=session["user_id"], url=image['link'], comment=request.form.get("comment"), title=request.form.get("title"))
+        picid = db.execute("SELECT picid FROM pics WHERE url = :url", url = image["link"])
 
-        return redirect(url_for("profielpagina"))
+        return redirect(url_for('imagepagina.html', clickedpic = picid[0]["picid"] , clickeduser = userid))
 
     else:
         return render_template("upload.html")

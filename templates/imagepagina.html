@@ -17,9 +17,63 @@
     border-radius: 8px;
     border: 2px solid #000d33;
     }
+
+    .hidden{
+        display:none;
+    }
+
+    .unhidden{
+        display:block;
+    }
     </style>
+
+    <script type="text/javascript">
+    function unhide(clickedButton, divID) {
+    var item = document.getElementById(divID);
+    if (item) {
+        if(item.className=='hidden'){
+            item.className = 'unhidden' ;
+            clickedButton.value = 'Close'
+        }else{
+            item.className = 'hidden';
+            clickedButton.value = 'Add comment'
+        }
+    }}
+
+    </script>
 
     <div class = "rcorners"><div class = "rcorners2"><img src={{photo[0]["url"]}} alt="Foto 1" class = "img-rounded"></div></div>
     <p class = "rcorners"><b>{{ photo[0]["title"] }}</b></p>
     <p class = "rcorners">{{photo[0]["comment"]}}</p>
+
+    <p><b>Comments</b></p>
+    {% if session.user_id %}
+    <input type="button" onclick="unhide(this, 'addcomment') " value="Add comment">
+    <div class = "hidden" id = "addcomment">
+        <form action="{{ url_for('postcomment', clickedpic = clickedpic, clickeduser = clickeduser) }}" method="post">
+            <fieldset>
+                <div class="form-group">
+                    <input autocomplete="off" autofocus class="form-control" name="title" placeholder="Subject" type="text"/>
+                </div>
+                <div class="form-group">
+                    <textarea rows="4" cols="50" name="comment" placeholder="Enter your comment here"></textarea>
+                </div>
+                <div class="form-group">
+                    <textarea rows="4" cols="50" name="poscomment" placeholder="Positive notes"></textarea>
+                </div>
+                <div class="form-group">
+                    <textarea rows="4" cols="50" name="negcomment" placeholder="Negative notes"></textarea>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-default" type="submit">Submit</button>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    {% endif %}
+    {% for comment in comments %}
+        <p>{{ comment["comment"] }}</p>
+        <p>{{ comment["poscomment"] }}</p>
+        <p>{{ comment["negcomment"] }}</p>
+    {% endfor %}
 {% endblock %}

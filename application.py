@@ -44,11 +44,6 @@ def index():
 
     return redirect(url_for('discover'))
 
-@app.route("/buttontest")
-def buttontest():
-
-    return render_template('buttontest.html')
-
 @app.route("/imagepagina/<clickedpic>/<clickeduser>", methods=["GET" , "POST"])
 def imagepagina(clickedpic, clickeduser):
 
@@ -62,9 +57,9 @@ def imagepagina(clickedpic, clickeduser):
         if clickeduser == user["id"]:
             userlist[clickeduser] = str(user["username"])
 
+    comments = db.execute("SELECT * FROM comments WHERE picid= :picid", picid = clickedpic)
 
-
-    return render_template('imagepagina.html', photo=photo, username = user, clickedpic = clickedpic)
+    return render_template('imagepagina.html', photo=photo, username = user, clickedpic = clickedpic, clickeduser = clickeduser, comments = comments)
 
 @app.route("/follow/<clickeduser>/<clickedname>", methods=["GET" , "POST"])
 @login_required
@@ -132,6 +127,17 @@ def profielpagina():
         eindcomment = photo["comment"]
     return render_template('profielpagina.html', photoprofile=photoprofile, user = userid)
 
+@app.route("/postcomment/<clickedpic>/<clickeduser>", methods=["GET", "POST"])
+@login_required
+def postcomment(clickedpic, clickeduser):
+    if not request.form.get("title"):
+        return apology("must provide subject")
+    if not request.form.get("comment"):
+        return apology("must enter comment")
+
+    db.execute("INSERT INTO comments (userid, picid, comment, poscomment, negcomment, title) VALUES(:userid, :picid, :comment, :poscomment, :negcomment, :title)", userid = session["user_id"], picid = clickedpic, comment = request.form.get("comment"), poscomment = request.form.get("poscomment"), negcomment = request.form.get("negcomment"), title = request.form.get("title") )
+
+    return redirect(url_for('imagepagina', clickedpic = clickedpic , clickeduser = clickeduser))
 
 @app.route("/upload", methods=["GET", "POST"])
 @login_required

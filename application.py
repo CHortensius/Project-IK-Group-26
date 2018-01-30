@@ -84,7 +84,7 @@ def gebruikerspagina(clickeduser, clickedname):
 
     clickeduser = int(clickeduser)
 
-    photoprofile = db.execute("SELECT * FROM pics WHERE userid = :id", id = clickeduser)
+    photoprofile = db.execute("SELECT * FROM pics WHERE userid = :id ORDER BY picid DESC", id = clickeduser)
 
     followcheck = False
 
@@ -102,7 +102,7 @@ def gebruikerspagina(clickeduser, clickedname):
 
 @app.route("/discover", methods=["GET", "POST"])
 def discover():
-    photoprofile = db.execute("SELECT * FROM pics ")
+    photoprofile = db.execute("SELECT * FROM pics ORDER BY picid DESC ")
     users = db.execute("SELECT username, id FROM Accounts")
     userlist = {}
     for profile in photoprofile:
@@ -121,7 +121,7 @@ def discover():
 def profielpagina():
 
     userid = session["user_id"]
-    photoprofile = db.execute("SELECT * FROM pics WHERE userid = :id", id = userid)
+    photoprofile = db.execute("SELECT * FROM pics WHERE userid = :id ORDER BY picid DESC", id = userid)
     #comments = db.execute("SELECT comment FROM pics WHERE userid = :id", id = session["user_id"])
     for photo in photoprofile:
         eindfoto = photo["url"]

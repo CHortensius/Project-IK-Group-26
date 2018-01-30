@@ -4,6 +4,7 @@ from flask_session import Session
 from passlib.apps import custom_app_context as pwd_context
 from tempfile import mkdtemp
 from imgurpython import ImgurClient
+from passlib.hash import pbkdf2_sha256
 
 from helpers import *
 from secret import *
@@ -83,7 +84,7 @@ def gebruikerspagina(clickeduser, clickedname):
 
     clickeduser = int(clickeduser)
 
-    photoprofile = db.execute("SELECT * FROM pics WHERE userid = :id", id = clickeduser)
+    photoprofile = db.execute("SELECT * FROM pics WHERE userid = :id ORDER BY picid DESC", id = clickeduser)
 
     followcheck = False
 
@@ -101,7 +102,7 @@ def gebruikerspagina(clickeduser, clickedname):
 
 @app.route("/discover", methods=["GET", "POST"])
 def discover():
-    photoprofile = db.execute("SELECT * FROM pics ")
+    photoprofile = db.execute("SELECT * FROM pics ORDER BY picid DESC")
     users = db.execute("SELECT username, id FROM Accounts")
     userlist = {}
     for profile in photoprofile:
@@ -115,12 +116,36 @@ def discover():
         eindid = eindcomment = photo["picid"]
     return render_template('discover.html', photoprofile=photoprofile, userlist = userlist)
 
+@app.route("/friends", methods=["GET", "POST"])
+@login_required
+def friendspagina():
+
+    volgend = db.execute("SELECT following_id from follow WHERE user_id = :userid", userid=session["user_id"])
+    volgerslijst = []
+    for volgers in volgend:
+        volgerslijst.append(volgers["following_id"])
+    print(volgerslijst)
+
+    photoprofile = db.execute("SELECT * FROM pics WHERE userid IN (:volgerslijst) ORDER BY picid DESC ", volgerslijst=volgerslijst)
+    users = db.execute("SELECT username, id FROM Accounts")
+    userlist = {}
+    for profile in photoprofile:
+        for user in users:
+            if profile["userid"] == user["id"]:
+                userlist[profile["userid"]] = user["username"]
+
+    for photo in photoprofile:
+        eindfoto = photo["url"]
+        eindcomment = photo["comment"]
+        eindid = eindcomment = photo["picid"]
+    return render_template('friends.html', photoprofile=photoprofile, userlist = userlist)
+
 @app.route("/profielpagina", methods=["GET" , "POST"])
 @login_required
 def profielpagina():
 
     userid = session["user_id"]
-    photoprofile = db.execute("SELECT * FROM pics WHERE userid = :id", id = userid)
+    photoprofile = db.execute("SELECT * FROM pics WHERE userid = :id ORDER BY picid DESC", id = userid)
     #comments = db.execute("SELECT comment FROM pics WHERE userid = :id", id = session["user_id"])
     for photo in photoprofile:
         eindfoto = photo["url"]
@@ -245,7 +270,7 @@ def register():
             return apology("Password doesn't match!")
 
         password = request.form.get("password")
-        hash = pwd_context.encrypt(password)
+        hash = pbkdf2_sha256.hash(password)
 
         result = db.execute("INSERT INTO Accounts (username,hash) VALUES (:username, :hash)", \
             username=request.form.get("username"), hash=hash)

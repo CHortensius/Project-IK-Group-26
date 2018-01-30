@@ -102,7 +102,7 @@ def gebruikerspagina(clickeduser, clickedname):
 
 @app.route("/discover", methods=["GET", "POST"])
 def discover():
-    photoprofile = db.execute("SELECT * FROM pics ORDER BY picid DESC ")
+    photoprofile = db.execute("SELECT * FROM pics ORDER BY picid DESC LIMIT 5 ")
     users = db.execute("SELECT username, id FROM Accounts")
     userlist = {}
     for profile in photoprofile:

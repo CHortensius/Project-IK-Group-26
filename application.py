@@ -116,6 +116,23 @@ def discover():
         eindid = eindcomment = photo["picid"]
     return render_template('discover.html', photoprofile=photoprofile, userlist = userlist)
 
+@app.route("/discover", methods=["GET", "POST"
+@login_required
+def friendspagina():
+    photoprofile = db.execute("SELECT * FROM pics ORDER BY picid DESC LIMIT 5 ")
+    users = db.execute("SELECT username, id FROM Accounts")
+    userlist = {}
+    for profile in photoprofile:
+        for user in users:
+            if profile["userid"] == user["id"]:
+                userlist[profile["userid"]] = user["username"]
+
+    for photo in photoprofile:
+        eindfoto = photo["url"]
+        eindcomment = photo["comment"]
+        eindid = eindcomment = photo["picid"]
+    return render_template('discover.html', photoprofile=photoprofile, userlist = userlist)
+
 @app.route("/profielpagina", methods=["GET" , "POST"])
 @login_required
 def profielpagina():

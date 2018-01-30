@@ -102,7 +102,7 @@ def gebruikerspagina(clickeduser, clickedname):
 
 @app.route("/discover", methods=["GET", "POST"])
 def discover():
-    photoprofile = db.execute("SELECT * FROM pics ORDER BY picid DESC LIMIT 5 ")
+    photoprofile = db.execute("SELECT * FROM pics ORDER BY picid DESC")
     users = db.execute("SELECT username, id FROM Accounts")
     userlist = {}
     for profile in photoprofile:
@@ -116,10 +116,17 @@ def discover():
         eindid = eindcomment = photo["picid"]
     return render_template('discover.html', photoprofile=photoprofile, userlist = userlist)
 
-@app.route("/discover", methods=["GET", "POST"
+@app.route("/friends", methods=["GET", "POST"])
 @login_required
 def friendspagina():
-    photoprofile = db.execute("SELECT * FROM pics ORDER BY picid DESC LIMIT 5 ")
+
+    volgend = db.execute("SELECT following_id from follow WHERE user_id = :userid", userid=session["user_id"])
+    volgerslijst = []
+    for volgers in volgend:
+        volgerslijst.append(volgers["following_id"])
+    print(volgerslijst)
+
+    photoprofile = db.execute("SELECT * FROM pics WHERE userid IN (:volgerslijst) ORDER BY picid DESC ", volgerslijst=volgerslijst)
     users = db.execute("SELECT username, id FROM Accounts")
     userlist = {}
     for profile in photoprofile:
@@ -131,7 +138,7 @@ def friendspagina():
         eindfoto = photo["url"]
         eindcomment = photo["comment"]
         eindid = eindcomment = photo["picid"]
-    return render_template('discover.html', photoprofile=photoprofile, userlist = userlist)
+    return render_template('friends.html', photoprofile=photoprofile, userlist = userlist)
 
 @app.route("/profielpagina", methods=["GET" , "POST"])
 @login_required

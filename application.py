@@ -4,6 +4,7 @@ from flask_session import Session
 from passlib.apps import custom_app_context as pwd_context
 from tempfile import mkdtemp
 from imgurpython import ImgurClient
+from passlib.hash import pbkdf2_sha256
 
 from helpers import *
 from secret import *
@@ -245,7 +246,7 @@ def register():
             return apology("Password doesn't match!")
 
         password = request.form.get("password")
-        hash = pwd_context.encrypt(password)
+        hash = pbkdf2_sha256.hash(password)
 
         result = db.execute("INSERT INTO Accounts (username,hash) VALUES (:username, :hash)", \
             username=request.form.get("username"), hash=hash)

@@ -84,6 +84,9 @@ def gebruikerspagina(clickeduser, clickedname):
 
     clickeduser = int(clickeduser)
 
+    if session["user_id"] == clickeduser:
+        return redirect(url_for("profielpagina"))
+
     photoprofile = db.execute("SELECT * FROM pics WHERE userid = :id ORDER BY picid DESC", id = clickeduser)
 
     followcheck = False

@@ -53,6 +53,13 @@ def imagepagina(clickedpic, clickeduser):
 
     clickedpic = int(clickedpic)
 
+    likecheck = False
+
+    if session.get("user_id") is not None:
+        result = db.execute("SELECT * FROM likes WHERE user_id = :user_id AND like_id = :like_id", user_id = session["user_id"], like_id = clickedpic )
+        if result != []:
+            likecheck = True
+
     photo = db.execute("SELECT * FROM pics WHERE picid = :id", id = clickedpic)
 
     users = db.execute("SELECT username, id FROM Accounts")
@@ -63,12 +70,12 @@ def imagepagina(clickedpic, clickeduser):
 
     comments = db.execute("SELECT * FROM comments WHERE picid= :picid", picid = clickedpic)
 
-    return render_template('imagepagina.html', photo=photo, username = user, clickedpic = clickedpic, clickeduser = clickeduser, comments = comments)
+    return render_template('imagepagina.html', photo=photo, username = user, clickedpic = clickedpic, clickeduser = clickeduser, comments = comments, likecheck = likecheck)
 
 @app.route("/follow/<clickeduser>/<clickedname>", methods=["GET" , "POST"])
 @login_required
 def follow(clickeduser,clickedname):
-    result = db.execute("SELECT * FROM follow WHERE user_id = :userid AND following_id = :followingid", userid = session["user_id"], followingid = clickeduser )
+    result = db.execute("SELECT * FROM follow WHERE user_id = :userid AND following_id = :following_id", userid = session["user_id"], following_id = clickeduser )
     if result == []:
         followcheck = False
     else:
@@ -78,23 +85,24 @@ def follow(clickeduser,clickedname):
     if followcheck == False:
         db.execute("INSERT INTO follow(user_id,following_id) VALUES(:user_id,:following_id)",user_id=session["user_id"],following_id=clickeduser)
     elif followcheck == True:
-        db.execute("DELETE FROM follow WHERE user_id = :userid AND following_id = :followingid",userid = session["user_id"],followingid = clickeduser)
+        db.execute("DELETE FROM follow WHERE user_id = :user_id AND following_id = :following_id",user_id = session["user_id"],following_id = clickeduser)
 
     return redirect(url_for('gebruikerspagina',clickeduser=clickeduser,clickedname = clickedname))
 
-@app.route("/like/<clickeduser>/<clickedname>", methods=["GET" , "POST"])
+@app.route("/like/<clickeduser>/<clickedpic>", methods=["GET" , "POST"])
 @login_required
-def like(clickeduser,clickedname):
-    result = db.execute("SELECT * FROM likes WHERE user_id = :userid AND like_id = :likeid", user_id = session["user_id"], like_id = clickeduser )
+def like(clickeduser, clickedpic):
+    result = db.execute("SELECT * FROM likes WHERE user_id = :user_id AND like_id = :like_id", user_id = session["user_id"], like_id = clickedpic )
+
     if result == []:
         likecheck = False
     else:
         likecheck = True
 
     if likecheck == False:
-        db.execute("INSERT INTO likes(user_id, like_id) VALUES(:user_id,:like_id)", user_id=session["user_id"], like_id=clickeduser)
+        db.execute("INSERT INTO likes(user_id, like_id) VALUES(:user_id,:like_id)", user_id=session["user_id"], like_id=clickedpic)
     elif likecheck == True:
-        db.execute("DELETE FROM likes WHERE user_id = :userid AND like_id = :likeid",userid = session["user_id"],like_id = clickeduser)
+        db.execute("DELETE FROM likes WHERE user_id = :user_id AND like_id = :like_id",user_id = session["user_id"],like_id = clickedpic)
 
     return redirect(url_for('imagepagina',clickeduser=clickeduser,clickedpic = clickedpic))
 

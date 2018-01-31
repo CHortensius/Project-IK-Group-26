@@ -25,7 +25,7 @@
     </style>
 
     {% if session.user_id %}
-    <form action="{{ url_for('like',clickeduser=clickeduser, clickedname=username) }}" class="form" method="post">
+    <form action="{{ url_for('like',clickeduser=clickeduser, clickedpic = clickedpic) }}" class="form" method="post">
     {% if likecheck == True %}
         <input class="btn btn--sm type--uppercase" name="submit" style="background: #e74c3c;border-color: #c0392b;color:white;width:100px;" type="submit" value="Dislike">
     {%else%}

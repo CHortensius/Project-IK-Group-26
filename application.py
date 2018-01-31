@@ -85,7 +85,7 @@ def follow(clickeduser,clickedname):
 @app.route("/like/<clickeduser>/<clickedname>", methods=["GET" , "POST"])
 @login_required
 def like(clickeduser,clickedname):
-    result = db.execute("SELECT * FROM likes WHERE user_id = :userid AND like_id = :likeid", userid = session["user_id"], likeid = clickeduser )
+    result = db.execute("SELECT * FROM likes WHERE user_id = :userid AND like_id = :likeid", user_id = session["user_id"], like_id = clickeduser )
     if result == []:
         likecheck = False
     else:
@@ -96,7 +96,7 @@ def like(clickeduser,clickedname):
     elif likecheck == True:
         db.execute("DELETE FROM likes WHERE user_id = :userid AND like_id = :likeid",userid = session["user_id"],like_id = clickeduser)
 
-    return redirect(url_for('gebruikerspagina',clickeduser=clickeduser,clickedname = clickedname))
+    return redirect(url_for('imagepagina',clickeduser=clickeduser,clickedpic = clickedpic))
 
 @app.route("/gebruikerspagina/<clickeduser>/<clickedname>", methods=["GET" , "POST"])
 def gebruikerspagina(clickeduser, clickedname):
@@ -329,6 +329,10 @@ def register():
 
     else:
         return render_template("register.html")
+
+@app.route("/about", methods=["GET" , "POST"])
+def about():
+     return render_template("about.html")
 
 
 

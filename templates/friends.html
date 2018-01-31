@@ -12,10 +12,12 @@
     <br></br>
     <br></br>
 
+<!---Als een gebruiker niemand volgt, geef dan deze tekst--->
     {% if anyfollowing == False %}
     <p>You're not following anyone!</p>
     {% endif %}
 
+<!---Als je wel gebruiker(s) volgt: laat deze foto's dan zien met titel, foto en beschrijving (zelfde als discover--->
     {% for photo in photoprofile %}
     <a class = "link" href="{{ url_for('gebruikerspagina',clickeduser=photo["userid"], clickedname=userlist[photo["userid"]]) }}">{{ userlist[photo["userid"]] }}</a>
     <br></br>

@@ -6,12 +6,14 @@
 
 {% block main %}
 
+<!---Geeft aan dat het bij Discover om nieuwe foto's gaat--->
     <form action="{{ url_for('profielpagina') }}" method="get" enctype="multipart/form-data" >
     <a class = "normaletekst">New Pictures</a>
     <br></br>
     <br></br>
     <br></br>
 
+<!---voor elke foto op discover-pagina: laat titel, foto (dmv url) en beschrijving zien--->
         {% for photo in photoprofile %}
         <a class = "link" href="{{ url_for('gebruikerspagina',clickeduser=photo["userid"], clickedname=userlist[photo["userid"]]) }}">{{ userlist[photo["userid"]] }}</a>
         <br></br>

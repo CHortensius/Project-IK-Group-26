@@ -17,8 +17,10 @@
 
     {% if session.user_id %}
     <form action="{{ url_for('like',clickeduser=clickeduser, clickedpic = clickedpic) }}" class="form" method="post">
+    <!---Wanneer je iets hebt geliked verandert de button in 'dislike'--->
     {% if likecheck == True %}
         <input class="btn btn--sm type--uppercase" name="submit" style="background: #e74c3c;border-color: #c0392b;color:white;width:100px;" type="submit" value="Dislike">
+    <!---Wanneer je iets nog hebt geliked verandert de button in 'like'/ hier begint de button mee--->
     {%else%}
         <input class="btn btn--sm type--uppercase" name="submit" style="background: #4a90e2;border-color: #4a90e2;color:white;width:100px;" type="submit" value="Like">
     {%endif%}

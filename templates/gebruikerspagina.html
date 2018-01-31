@@ -6,6 +6,7 @@
 
 {% block main %}
 
+    <!---Als er een gif wordt gevonden in de database bij userinfo, laat deze gif dan zien. --->
     {% if userinfo[0]["profilegif"] %}
     <img src ="{{ userinfo[0]["profilegif"] }}" >
     <br>
@@ -17,16 +18,20 @@
     <br></br>
     <br></br>
 
+    <!---Als er een gebruiker is ingelogd, is er de mogelijkheid om te volgen dmv follow knop  --->
     {% if session.user_id %}
     <form action="{{ url_for('follow',clickeduser=clickeduser, clickedname=username) }}" class="form" method="post">
+    <!---Als de ingelogde gebruiker op follow heeft gedrukt, verander de follow knop dan in unfollow --->
     {% if followcheck == True %}
         <input class="btn btn--sm type--uppercase" name="submit" style="background: #e74c3c;border-color: #c0392b;color:white;width:100px;" type="submit" value="Unfollow">
+    <!---Als de ingelogde gebruiker de gebruiker nog niet volgt, is er de mogelijkheid om op follow te drukken--->
     {%else%}
         <input class="btn btn--sm type--uppercase" name="submit" style="background: #4a90e2;border-color: #4a90e2;color:white;width:100px;" type="submit" value="Follow">
     {%endif%}
     </form>
     {% endif %}
 
+    <!---Laat alle foto's van de gebruiker van de gebruikerspagina zien, samen met titel en beschrijving --->
     {% for photo in photoprofile %}
     <p class = "normaletekst">{{photo["title"]}}</p>
     <div class = "normaletekst"><a href="{{ url_for('imagepagina',clickedpic=photo["picid"],clickeduser = clickeduser) }}" class = "rcorners2"><img src="{{photo["url"]}}" alt="Foto 1" class = "img-rounded"></a></div>

@@ -46,6 +46,9 @@ db = SQL("sqlite:///accounts.db")
 @app.route("/")
 def index():
 
+    if session.get("user_id") is not None:
+        return redirect(url_for('friends'))
+
     return redirect(url_for('discover'))
 
 @app.route("/imagepagina/<clickedpic>/<clickeduser>", methods=["GET" , "POST"])

@@ -5,6 +5,8 @@ from passlib.apps import custom_app_context as pwd_context
 from tempfile import mkdtemp
 from imgurpython import ImgurClient
 from passlib.hash import sha256_crypt
+import urllib.request,json
+from urllib.parse import urljoin
 
 from helpers import *
 from secret import *
@@ -13,6 +15,7 @@ import shutil
 import time
 import os
 import secret
+import requests
 
 from PIL import Image
 
@@ -183,6 +186,28 @@ def postcomment(clickedpic, clickeduser):
     db.execute("INSERT INTO comments (userid, picid, comment, poscomment, negcomment, title) VALUES(:userid, :picid, :comment, :poscomment, :negcomment, :title)", userid = session["user_id"], picid = clickedpic, comment = request.form.get("comment"), poscomment = request.form.get("poscomment"), negcomment = request.form.get("negcomment"), title = request.form.get("title") )
 
     return redirect(url_for('imagepagina', clickedpic = clickedpic , clickeduser = clickeduser))
+
+@app.route("/profilegif", methods=["GET" , "POST"])
+@login_required
+def profilegif():
+    if request.method == "POST":
+
+        if not request.form.get("gifsearch"):
+            return apology("must provide search value")
+
+        hoofd_url = "http://api.giphy.com/v1/gifs/search?q="
+        public_key = "&api_key=dc6zaTOxFJmzC&limit=1"
+        search_value = request.form.get("gifsearch")
+        joined_url = hoofd_url + search_value + public_key
+
+        data = json.loads(requests.get(joined_url).text)
+        gif_url = json.dumps(data["data"][0]["embed_url"])
+        print(gif_url)
+        return render_template('profilegif.html', gif_url = gif_url)
+
+
+    else:
+        return render_template("profilegif.html")
 
 @app.route("/upload", methods=["GET", "POST"])
 @login_required

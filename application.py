@@ -47,7 +47,7 @@ db = SQL("sqlite:///accounts.db")
 def index():
 
     if session.get("user_id") is not None:
-        return redirect(url_for('friends'))
+        return redirect(url_for('friendspagina'))
 
     return redirect(url_for('discover'))
 
@@ -160,6 +160,11 @@ def friendspagina():
         volgerslijst.append(volgers["following_id"])
     print(volgerslijst)
 
+    anyfollowing = False
+
+    if volgend != []:
+        anyfollowing = True
+
     photoprofile = db.execute("SELECT * FROM pics WHERE userid IN (:volgerslijst) ORDER BY picid DESC ", volgerslijst=volgerslijst)
     users = db.execute("SELECT username, id FROM Accounts")
     userlist = {}
@@ -172,7 +177,7 @@ def friendspagina():
         eindfoto = photo["url"]
         eindcomment = photo["comment"]
         eindid = eindcomment = photo["picid"]
-    return render_template('friends.html', photoprofile=photoprofile, userlist = userlist)
+    return render_template('friends.html', photoprofile=photoprofile, userlist = userlist, anyfollowing = anyfollowing)
 
 @app.route("/profielpagina", methods=["GET" , "POST"])
 @login_required
@@ -290,7 +295,7 @@ def login():
         session["user_id"] = rows[0]["id"]
 
         # redirect user to home page
-        return redirect(url_for("discover"))
+        return redirect(url_for("index"))
 
     # else if user reached route via GET (as by clicking a link or via redirect)
     else:

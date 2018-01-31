@@ -6,8 +6,23 @@
 
 {% block main %}
 
+<<<<<<< HEAD
     <form action="{{ url_for('profielpagina') }}" method="get" enctype="multipart/form-data" >
     <a class = "normaletekst">Your Pictures</a>
+=======
+    .rcorners2 {
+    border-radius: 8px;
+    border: 2px solid #000d33;
+    }
+    </style>
+
+    {% if userinfo[0]["profilegif"] %}
+    <img src ="{{ userinfo[0]["profilegif"] }}" >
+    <br>
+    <br>
+    {% endif %}
+    <a class = "rcorners">Your Pictures</a>
+>>>>>>> df4e45207f2a883d70f7b6fe1278d7dd76d1fda2
     <a href="{{ url_for('profilegif') }}">Search a Gif</a>
     <br></br>
     <br></br>

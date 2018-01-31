@@ -1,16 +1,24 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Discover
+    Feed
 {% endblock %}
 
 {% block main %}
 
     <form action="{{ url_for('profielpagina') }}" method="get" enctype="multipart/form-data" >
+<<<<<<< HEAD
     <a class = "normaletekst">New Pictures</a>
+=======
+    <a class = "rcorners">Feed</a>
+>>>>>>> df4e45207f2a883d70f7b6fe1278d7dd76d1fda2
     <br></br>
     <br></br>
     <br></br>
+
+    {% if anyfollowing == False %}
+    <p>You're not following anyone!</p>
+    {% endif %}
 
     {% for photo in photoprofile %}
     <a class = "link" href="{{ url_for('gebruikerspagina',clickeduser=photo["userid"], clickedname=userlist[photo["userid"]]) }}">{{ userlist[photo["userid"]] }}</a>

@@ -46,12 +46,22 @@ db = SQL("sqlite:///accounts.db")
 @app.route("/")
 def index():
 
+    if session.get("user_id") is not None:
+        return redirect(url_for('friendspagina'))
+
     return redirect(url_for('discover'))
 
 @app.route("/imagepagina/<clickedpic>/<clickeduser>", methods=["GET" , "POST"])
 def imagepagina(clickedpic, clickeduser):
 
     clickedpic = int(clickedpic)
+
+    likecheck = False
+
+    if session.get("user_id") is not None:
+        result = db.execute("SELECT * FROM likes WHERE user_id = :user_id AND like_id = :like_id", user_id = session["user_id"], like_id = clickedpic )
+        if result != []:
+            likecheck = True
 
     photo = db.execute("SELECT * FROM pics WHERE picid = :id", id = clickedpic)
 
@@ -63,38 +73,39 @@ def imagepagina(clickedpic, clickeduser):
 
     comments = db.execute("SELECT * FROM comments WHERE picid= :picid", picid = clickedpic)
 
-    return render_template('imagepagina.html', photo=photo, username = user, clickedpic = clickedpic, clickeduser = clickeduser, comments = comments)
+    return render_template('imagepagina.html', photo=photo, username = user, clickedpic = clickedpic, clickeduser = clickeduser, comments = comments, likecheck = likecheck)
 
 @app.route("/follow/<clickeduser>/<clickedname>", methods=["GET" , "POST"])
 @login_required
 def follow(clickeduser,clickedname):
-    result = db.execute("SELECT * FROM follow WHERE user_id = :userid AND following_id = :followingid", userid = session["user_id"], followingid = clickeduser )
+    result = db.execute("SELECT * FROM follow WHERE user_id = :userid AND following_id = :following_id", userid = session["user_id"], following_id = clickeduser )
     if result == []:
         followcheck = False
     else:
         followcheck = True
 
-    ###############
     if followcheck == False:
         db.execute("INSERT INTO follow(user_id,following_id) VALUES(:user_id,:following_id)",user_id=session["user_id"],following_id=clickeduser)
     elif followcheck == True:
-        db.execute("DELETE FROM follow WHERE user_id = :userid AND following_id = :followingid",userid = session["user_id"],followingid = clickeduser)
+        db.execute("DELETE FROM follow WHERE user_id = :user_id AND following_id = :following_id",user_id = session["user_id"],following_id = clickeduser)
 
     return redirect(url_for('gebruikerspagina',clickeduser=clickeduser,clickedname = clickedname))
 
-@app.route("/like/<clickeduser>/<clickedname>", methods=["GET" , "POST"])
+@app.route("/like/<clickeduser>/<clickedpic>", methods=["GET" , "POST"])
 @login_required
-def like(clickeduser,clickedname):
-    result = db.execute("SELECT * FROM likes WHERE user_id = :userid AND like_id = :likeid",userid = session["user_id"], likeid = clickeduser)
+def like(clickeduser, clickedpic):
+    result = db.execute("SELECT * FROM likes WHERE user_id = :user_id AND like_id = :like_id", user_id = session["user_id"], like_id = clickedpic )
+
+
     if result == []:
         likecheck = False
     else:
         likecheck = True
 
     if likecheck == False:
-        db.execute("INSERT INTO likes(user_id, like_id) VALUES(:user_id,:like_id)", user_id=session["user_id"], like_id=clickeduser)
+        db.execute("INSERT INTO likes(user_id, like_id) VALUES(:user_id,:like_id)", user_id=session["user_id"], like_id=clickedpic)
     elif likecheck == True:
-        db.execute("DELETE FROM likes WHERE user_id = :userid AND like_id = :likeid",userid = session["user_id"],like_id = clickeduser)
+        db.execute("DELETE FROM likes WHERE user_id = :user_id AND like_id = :like_id",user_id = session["user_id"],like_id = clickedpic)
 
     return redirect(url_for('imagepagina',clickeduser=clickeduser,clickedpic = clickedpic))
 
@@ -109,10 +120,12 @@ def gebruikerspagina(clickeduser, clickedname):
 
     photoprofile = db.execute("SELECT * FROM pics WHERE userid = :id ORDER BY picid DESC", id = clickeduser)
 
+    userinfo = db.execute("SELECT * FROM Accounts WHERE id = :id", id = clickeduser)
+
     followcheck = False
 
     if session.get("user_id") is not None:
-        result = db.execute("SELECT * FROM follow WHERE user_id = :userid AND following_id = :followingid", userid = session["user_id"], followingid = clickeduser )
+        result = db.execute("SELECT * FROM follow WHERE user_id = :userid AND following_id = :followingid", userid = session["user_id"], followingid = clickeduser)
         if result != []:
             followcheck = True
 
@@ -121,7 +134,7 @@ def gebruikerspagina(clickeduser, clickedname):
         eindfoto = photo["url"]
         eindcomment = photo["comment"]
         eindid = eindcomment = photo["picid"]
-    return render_template('gebruikerspagina.html', photoprofile=photoprofile, username = clickedname, clickeduser = clickeduser,followcheck = followcheck)
+    return render_template('gebruikerspagina.html', photoprofile=photoprofile, username = clickedname, clickeduser = clickeduser,followcheck = followcheck, userinfo = userinfo)
 
 @app.route("/discover", methods=["GET", "POST"])
 def discover():
@@ -149,6 +162,11 @@ def friendspagina():
         volgerslijst.append(volgers["following_id"])
     print(volgerslijst)
 
+    anyfollowing = False
+
+    if volgend != []:
+        anyfollowing = True
+
     photoprofile = db.execute("SELECT * FROM pics WHERE userid IN (:volgerslijst) ORDER BY picid DESC ", volgerslijst=volgerslijst)
     users = db.execute("SELECT username, id FROM Accounts")
     userlist = {}
@@ -161,7 +179,7 @@ def friendspagina():
         eindfoto = photo["url"]
         eindcomment = photo["comment"]
         eindid = eindcomment = photo["picid"]
-    return render_template('friends.html', photoprofile=photoprofile, userlist = userlist)
+    return render_template('friends.html', photoprofile=photoprofile, userlist = userlist, anyfollowing = anyfollowing)
 
 @app.route("/profielpagina", methods=["GET" , "POST"])
 @login_required
@@ -173,7 +191,10 @@ def profielpagina():
     for photo in photoprofile:
         eindfoto = photo["url"]
         eindcomment = photo["comment"]
-    return render_template('profielpagina.html', photoprofile=photoprofile, user = userid)
+
+    userinfo = db.execute("SELECT * FROM Accounts WHERE id = :id", id = userid)
+
+    return render_template('profielpagina.html', photoprofile=photoprofile, user = userid, userinfo = userinfo)
 
 @app.route("/postcomment/<clickedpic>/<clickeduser>", methods=["GET", "POST"])
 @login_required
@@ -201,8 +222,10 @@ def profilegif():
         joined_url = hoofd_url + search_value + public_key
 
         data = json.loads(requests.get(joined_url).text)
-        gif_url = json.dumps(data["data"][0]["embed_url"])
-        print(gif_url)
+        gif_url = json.dumps(data["data"][0]["images"]["original"]["url"]).strip('"')
+
+        db.execute("UPDATE Accounts SET profilegif = :profilegif WHERE id = :id", profilegif = gif_url, id = session["user_id"])
+
         return render_template('profilegif.html', gif_url = gif_url)
 
 
@@ -280,7 +303,7 @@ def login():
         session["user_id"] = rows[0]["id"]
 
         # redirect user to home page
-        return redirect(url_for("discover"))
+        return redirect(url_for("index"))
 
     # else if user reached route via GET (as by clicking a link or via redirect)
     else:

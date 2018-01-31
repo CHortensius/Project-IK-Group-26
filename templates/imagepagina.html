@@ -27,6 +27,18 @@
     }
     </style>
 
+    {% if session.user_id %}
+    <form action="{{ url_for('like',clickeduser=clickeduser, clickedname=username) }}" class="form" method="post">
+    {% if likecheck == True %}
+        <input class="btn btn--sm type--uppercase" name="submit" style="background: #e74c3c;border-color: #c0392b;color:white;width:100px;" type="submit" value="Dislike">
+    {%else%}
+        <input class="btn btn--sm type--uppercase" name="submit" style="background: #4a90e2;border-color: #4a90e2;color:white;width:100px;" type="submit" value="Like">
+    {%endif%}
+    </form>
+    {% endif %}
+
+
+
     <script type="text/javascript">
     function unhide(clickedButton, divID) {
     var item = document.getElementById(divID);
@@ -39,7 +51,6 @@
             clickedButton.value = 'Add comment'
         }
     }}
-
     </script>
 
     <div class = "rcorners"><div class = "rcorners2"><img src={{photo[0]["url"]}} alt="Foto 1" class = "img-rounded"></div></div>

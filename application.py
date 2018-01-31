@@ -289,7 +289,7 @@ def register():
             return apology("Password doesn't match!")
 
         password = request.form.get("password")
-        hash = sha256_crypt.encrypt(password)
+        hash = sha256_crypt.hash(password)
 
         result = db.execute("INSERT INTO Accounts (username,hash) VALUES (:username, :hash)", \
             username=request.form.get("username"), hash=hash)

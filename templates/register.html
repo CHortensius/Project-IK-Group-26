@@ -5,6 +5,7 @@
 {% endblock %}
 
 {% block main %}
+    <!---Hetzelfde als bij inlog, alleen dan registreer je nu een nieuwe gebruiker en moet het wachtwoord twee keer hetzelfde zijn--->
     <form action="{{ url_for('register') }}" method="post">
         <fieldset>
             <div class="form-group">

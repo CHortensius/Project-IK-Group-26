@@ -33,6 +33,5 @@ De repository zit als volgt in elkaar:
 - In de map 'templates' vindt je alle html pagina's
 - Application.py (Alle functies)
 - Helpers.py (SQL)
-- Accounts.db (Database)
-- ?
+- In de map 'Static' vindt je afbeeldingen (+ teken, - teken) en het bestand style.css 
  

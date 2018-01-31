@@ -15,19 +15,6 @@
     }
     </style>
 
-    {% if session.user_id %}
-    <form action="{{ url_for('like',clickeduser=clickeduser, clickedpic = clickedpic) }}" class="form" method="post">
-    <!---Wanneer je iets hebt geliked verandert de button in 'dislike'--->
-    {% if likecheck == True %}
-        <input class="btn btn--sm type--uppercase" name="submit" style="background: #e74c3c;border-color: #c0392b;color:white;width:100px;" type="submit" value="Dislike">
-    <!---Wanneer je iets nog hebt geliked verandert de button in 'like'/ hier begint de button mee--->
-    {%else%}
-        <input class="btn btn--sm type--uppercase" name="submit" style="background: #4a90e2;border-color: #4a90e2;color:white;width:100px;" type="submit" value="Like">
-    {%endif%}
-    </form>
-    {% endif %}
-
-
     <!---Een stukje JavaScript om de comments mogelijk te maken--->
     <script type="text/javascript">
     function unhide(clickedButton, divID) {
@@ -43,18 +30,32 @@
     }}
     </script>
 
-    <!---Laat hier het aantal likes zien per foto--->
-    <a class = "normaletekst" href="{{ url_for('gebruikerspagina',clickeduser=clickeduser, clickedname=username) }}">{{username}}</a>
-    <br></br>
-    <p>{{ likecount }} likes</p>
+    <a class = "header" href="{{ url_for('gebruikerspagina',clickeduser=clickeduser, clickedname=username) }}">{{username}}</a>
+    <br>
 
     <!---Laat de foto, samen met de titel en beschrijving zien--->
-    <p class = "normaletekst"><b>{{ photo[0]["title"] }}</b></p>
+    <p class = "header"><b>{{ photo[0]["title"] }}</b></p>
+    <br>
+    <p class = "normaletekst">{{ likecount }} likes</p>
+    <br>
+    <!---Laat een like knop zien wanner ingelogd--->
+    {% if session.user_id %}
+    <form action="{{ url_for('like',clickeduser=clickeduser, clickedpic = clickedpic) }}" class="form" method="post">
+    <!---Wanneer je iets hebt geliked verandert de button in 'dislike'--->
+    {% if likecheck == True %}
+        <input class="btn btn--sm type--uppercase" name="submit" style="background: #e74c3c;border-color: #c0392b;color:white;width:100px;" type="submit" value="Dislike">
+    <!---Wanneer je iets nog hebt geliked verandert de button in 'like'/ hier begint de button mee--->
+    {%else%}
+        <input class="btn btn--sm type--uppercase" name="submit" style="background: #4a90e2;border-color: #4a90e2;color:white;width:100px;" type="submit" value="Like">
+    {%endif%}
+    </form>
+    <br>
+    {% endif %}
     <div class = "normaletekst"><div class = "normaletekst"><img src={{photo[0]["url"]}} alt="Foto 1" class = "img-rounded"></div></div>
     <p class = "beschrijving">{{photo[0]["comment"]}}</p>
 
     <!---Laat hieronder alle comments zien die zijn gepost bij de desbetreffende foto--->
-    <p><b>Comments</b></p>
+    <p class = "header">Comments</p>
     {% if session.user_id %}
     <!--- Dit is een knop om een comment toe te voegen--->
     <input type="button" onclick="unhide(this, 'addcomment') " value="Add comment">
@@ -82,21 +83,20 @@
         </form>
     </div>
     {% endif %}
+    <br>
     {% for comment in comments %}
         <br>
-        <br>
-        <br>
         <!---Plus en minteken worden toegevoegd aan resp positief comment of negatief comment--->
-        <a class = "link" href="{{ url_for('gebruikerspagina',clickeduser=comment["userid"], clickedname=userlist[comment["userid"]]) }}"><b>{{ userlist[comment["userid"]] }}</b></a>
-        <p><b>{{ comment["title"] }}</b></p>
-        <p>{{ comment["comment"] }}</p>
+        <a class = "user" href="{{ url_for('gebruikerspagina',clickeduser=comment["userid"], clickedname=userlist[comment["userid"]]) }}"><b>{{ userlist[comment["userid"]] }}</b></a>
+        <p class = "normaletekst"><b>{{ comment["title"] }}</b></p>
+        <p class = "normaletekst">{{ comment["comment"] }}</p>
         {% if comment["poscomment"] %}
-        <img src="{{ url_for('static', filename='plus.png') }}" />
-        <p>{{ comment["poscomment"] }}</p>
+        <img src="{{ url_for('static', filename='plus.png') }}">
+        <p class = "normaletekst">{{ comment["poscomment"] }}</p>
         {% endif %}
         {% if comment["negcomment"] %}
-        <img src="{{ url_for('static', filename='min.png') }}" />
-        <p>{{ comment["negcomment"] }}</p>
+        <img src="{{ url_for('static', filename='min.png') }}">
+        <p class = "normaletekst">{{ comment["negcomment"] }}</p>
         {% endif %}
     {% endfor %}
 {% endblock %}

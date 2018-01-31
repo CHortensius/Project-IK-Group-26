@@ -6,24 +6,21 @@
 
 {% block main %}
      <p class = "normaletekst">Upload your image here!</a>
-     <br></br>
+     <br>
     <!---Plaintext om uit te leggen dat alle velden moeten worden ingevuld, anders apology--->
      <p class = "normaletekst">Don't forget to pick a title and a description for your picture</a>
-     <br></br>
-     <br></br>
-     <br></br>
+     <br>
 
     <form action="/upload" method="post" enctype="multipart/form-data" >
         <span class="btn btn-default btn-file">
         <input type="file" name="image" accept="image/*">
         </span>
-        <br></br>
-
+        <br>
         <!---Vraag om een titel en een beschrijving. Beschrijving zit een max. aantal tekens aan--->
         <div class="form-group">
             <input class="form-control" name="title" placeholder="Title"/>
         </div>
-        <br></br>
+        <br>
         <textarea rows="4" cols="50" name="comment" placeholder="Description"></textarea>
         <br>
         <!---Upload button waarna je wordt gestuurd naar je profielpagina--->

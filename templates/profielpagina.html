@@ -11,25 +11,27 @@
     {% if userinfo[0]["profilegif"] %}
     <img src ="{{ userinfo[0]["profilegif"] }}" >
     <br>
+    <a href="{{ url_for('profilegif') }}">Set profile picture</a>
+    <br>
     <br>
     {% endif %}
-    <a class = "normaletekst">Your Pictures</a>
-    <a href="{{ url_for('profilegif') }}">Search a Gif</a>
-    <br></br>
-    <br></br>
-    <br></br>
+    <p class = "header">Your Pictures</p>
+    <br>
     <!---Geef hier het aantal volgers aan dmv followcount--->
-    <p>{{ followcount }} followers</p>
+    <p class = "normaletekst">{{ followcount }} followers</p>
     <br>
-    <br>
+
+    {% if anypics == False %}
+    <p class = "normaletekst">You haven't posted any pictures</p>
+    {% endif %}
 
     <!---Geef de foto, titel en beschrijving bij de foto voor elke foto van de ingelogde gebruiker --->
     {% for photo in photoprofile %}
     <p class = "normaletekst"><b>{{photo["title"]}}</b></p>
     <div class = "normaletekst"><a href="{{ url_for('imagepagina',clickedpic=photo["picid"], clickeduser=photo["userid"]) }}" class = "rcorners2"><img src="{{photo["url"]}}" alt="Foto 1" class="img-rounded"></a></div>
     <p class = "beschrijving">{{photo["comment"]}}</p>
-    <br></br>
-    <br></br>
+    <br>
+    <br>
     {% endfor %}
     </form>
 {% endblock %}

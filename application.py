@@ -126,6 +126,11 @@ def gebruikerspagina(clickeduser, clickedname):
 
     photoprofile = showphotogebruiker(clickeduser)
 
+    anypics = False
+    # Controleert of de gebruiker foto's heeft
+    if photoprofile != []:
+        anypics = True
+
     userinfo = getuserinfo(clickeduser)
 
     followcheck = False
@@ -139,7 +144,7 @@ def gebruikerspagina(clickeduser, clickedname):
             followcheck = True
 
     showmultiplephotos(photoprofile)
-    return render_template('gebruikerspagina.html', followcount = followcount, photoprofile=photoprofile, username = clickedname, clickeduser = clickeduser,followcheck = followcheck, userinfo = userinfo)
+    return render_template('gebruikerspagina.html',anypics = anypics, followcount = followcount, photoprofile=photoprofile, username = clickedname, clickeduser = clickeduser,followcheck = followcheck, userinfo = userinfo)
 
 @app.route("/discover", methods=["GET", "POST"])
 def discover():
@@ -150,7 +155,7 @@ def discover():
     showmultiplephotos(photoprofile)
     return render_template('discover.html', photoprofile=photoprofile, userlist = userlist)
 
-@app.route("/friends", methods=["GET", "POST"])
+@app.route("/feed", methods=["GET", "POST"])
 @login_required
 def friendspagina():
     # Kijkt welke accounts de gebruiker volgt
@@ -180,11 +185,16 @@ def profielpagina():
         eindfoto = photo["url"]
         eindcomment = photo["comment"]
 
+    anypics = False
+
+    if photoprofile != []:
+        anypics = True
+
     followcount = len(countfollowersprofile())
 
     userinfo = getmyinfo()
 
-    return render_template('profielpagina.html',followcount = followcount, photoprofile=photoprofile, userinfo = userinfo)
+    return render_template('profielpagina.html',anypics = anypics, followcount = followcount, photoprofile=photoprofile, userinfo = userinfo)
 
 @app.route("/postcomment/<clickedpic>/<clickeduser>", methods=["GET", "POST"])
 @login_required

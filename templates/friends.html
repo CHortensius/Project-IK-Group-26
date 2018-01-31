@@ -7,25 +7,22 @@
 {% block main %}
 
     <form action="{{ url_for('profielpagina') }}" method="get" enctype="multipart/form-data" >
-    <a class = "normaletekst">Feed</a>
-    <br></br>
-    <br></br>
-    <br></br>
+    <p class = "header">Feed</p>
+    <br>
 
 <!---Als een gebruiker niemand volgt, geef dan deze tekst--->
     {% if anyfollowing == False %}
-    <p>You're not following anyone!</p>
+    <p class = "normaletekst">You're not following anyone!</p>
     {% endif %}
 
 <!---Als je wel gebruiker(s) volgt: laat deze foto's dan zien met titel, foto en beschrijving (zelfde als discover--->
     {% for photo in photoprofile %}
-    <a class = "link" href="{{ url_for('gebruikerspagina',clickeduser=photo["userid"], clickedname=userlist[photo["userid"]]) }}">{{ userlist[photo["userid"]] }}</a>
-    <br></br>
-    <p class = "normaletekst"><b>{{photo["title"]}}</b></p>
+    <br>
+    <a class = "user" href="{{ url_for('gebruikerspagina',clickeduser=photo["userid"], clickedname=userlist[photo["userid"]]) }}">{{ userlist[photo["userid"]] }}</a>
+    <br>
+    <p class = "header"><b>{{photo["title"]}}</b></p>
     <div class = "normaletekst"><a href="{{ url_for('imagepagina',clickedpic=photo["picid"], clickeduser=photo["userid"]) }}" class = "rcorners2"><img src="{{photo["url"]}}" alt="Foto 1" class = "img-rounded"></a></div>
     <p class = "beschrijving">{{photo["comment"]}}</p>
-    <br></br>
-    <br></br>
     {% endfor %}
     </form>
 {% endblock %}

@@ -13,10 +13,9 @@
     <br>
     {% endif %}
 
-    <a class = "normaletekst">{{username}}'s pictures</a>
-    <br></br>
-    <p>{{ followcount }} followers</p>
+    <p class = "header">{{username}}'s pictures</p>
     <br>
+    <p class = "normaletekst">{{ followcount }} followers</p>
     <br>
 
     <!---Als er een gebruiker is ingelogd, is er de mogelijkheid om te volgen dmv follow knop  --->
@@ -32,12 +31,17 @@
     </form>
     {% endif %}
 
+    <br>
+    {% if anypics == False %}
+    <p class = "normaletekst">{{ username }} hasn't posted any pictures</p>
+    {% endif %}
+
     <!---Laat alle foto's van de gebruiker van de gebruikerspagina zien, samen met titel en beschrijving --->
     {% for photo in photoprofile %}
-    <p class = "normaletekst">{{photo["title"]}}</p>
+    <p class = "header"><b>{{photo["title"]}}</b></p>
     <div class = "normaletekst"><a href="{{ url_for('imagepagina',clickedpic=photo["picid"],clickeduser = clickeduser) }}" class = "rcorners2"><img src="{{photo["url"]}}" alt="Foto 1" class = "img-rounded"></a></div>
     <p class = "beschrijving">{{photo["comment"]}}</p>
-    <br></br>
-    <br></br>
+    <br>
+    <br>
     {% endfor %}
 {% endblock %}

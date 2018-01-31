@@ -7,6 +7,12 @@
 {% block main %}
 
     <form action="{{ url_for('profielpagina') }}" method="get" enctype="multipart/form-data" >
+
+    {% if userinfo[0]["profilegif"] %}
+    <img src ="{{ userinfo[0]["profilegif"] }}" >
+    <br>
+    <br>
+    {% endif %}
     <a class = "normaletekst">Your Pictures</a>
     <a href="{{ url_for('profilegif') }}">Search a Gif</a>
     <br></br>

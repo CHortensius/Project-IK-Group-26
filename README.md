@@ -1,49 +1,18 @@
-## Photosharing voor Fotografen: Sophie, Alex en Cas 
+# PiCrits: The best way to teach & learn photography
+#### Photosharing project door Alex Zwijnenburg, Cas Hortensius en Sophie Hutten
 
-### Samenvatting
-Welkom bij onze webapp "Naam website"! Een website waar je aan fotografie-skills kunt werken of andere fotografen kunt voorzien van de beste tips & tricks voor het maken van het perfecte shot. "Naam website" is handig voor iedereen die zich bezig houdt met fotografie: als hobby dan wel als professie. Door je foto hier te posten kunnen anderen je nog meer leren zodat je binnen no time het perfecte shot kunt schieten. Bovendien is het een platform waar je je creativiteit kan delen met liefhebbers. Het is een nieuw, origineel platform die aansluit bij de grote passie van fotografieliefhebbers wereldwijd. 
+## Samenvatting
+Welkom bij PiCrits! Een website waar je aan fotografie-skills kunt werken of andere fotografen kunt voorzien van de beste tips & tricks voor het maken van het perfecte shot. Picrits is handig voor iedereen die zich bezig houdt met fotografie: als hobby dan wel als professie. Door je foto hier te posten kunnen anderen je nog meer leren zodat je binnen no time het perfecte shot kunt schieten. Bovendien is het een platform waar je je creativiteit kan delen met liefhebbers. Het is een nieuw, origineel platform die aansluit bij de grote passie van fotografieliefhebbers wereldwijd. 
 
-### Minimum viable product 
-- Gebruikers moeten een account kunnen maken
-- Gebruikers moeten foto’s kunnen uploaden
-- Gebruikers moeten op foto’s kunnen reageren 
-- Gebruikers moeten andere gebruikers kunnen volgen
-- Gebruikers moeten een pagina met foto’s van gebruikers die ze volgen hebben (FRIENDS)
-- Gebruikers moeten een pagina met foto’s van willekeurige gebruikers hebben (DISCOVERY)
-- Gebruikers moeten foto’s van andere gebruikers kunnen liken
+## Hier screenshot van applicatie wanneer af
 
-### Externe Componenten
-- Bootstrap: Gebruiken we voor een CSS opmaak van onze website
-- Imgur API: Om de foto's die worden geupload op te slaan en de URL te kunnen opslaan in de database
-- MyPHPAdmin: Database voor het opslaan van gebruikers en foto's 
-- Flask: Python framework voor het bouwen van een website
-
-### Concurrende bestaande websites
-- Instagram: instagram is bedoeld voor elk soort foto's. Onze website zal zich echt gaan richten op professionele fotografie, en is gericht op feedback in plaats van connecten met vrienden. 
-- Tumblr: Hier geldt eigenlijk hetzelfde als voor instagram: het is niet expliciet voor professionele fotografie.
-- Pinterest: Hier plaatst men foto's voor zichzelf, in de vorm van een pin-board, niet in de hoop op reacties/tips.
-- Steam: Op steam kunnen reacties geliked en disliked worden. Dit gaan wij meenemen om hierdoor de fotografen te motiveren om betere foto's te maken. Echter richt "Naam website" zich vooral op positieve feedback: het platform is niet bedoeld om andere gebruikers 'af te kraken' zoals bij Steam wel gebeurd.
-
-### Opzet van de website
-##### WELKOMPAGINA:
-De pagina waar je op komt wanneer je de website opent. Hier vindt je een uitleg over de website en een optie om je aan te melden of in te loggen. 
-##### REGISTER:
-Hier kan je een account aanmaken (POST). Dit wordt opgeslagen in een database en zo onthouden. 
-##### LOGIN:
-Hier kan je inloggen als je accountnaam en wachtwoord al bestaat. Ook d.m.v. POST
-##### DISCOVERYPAGINA: 
-Dit is de pagina waar je komt als je bent ingelogd of aangemeld. Hier vindt je d.m.v. GET: 
-- Een link naar je profielpagina
-- Een optie om de foto's die je ziet op de Discover pagina te filteren. Keuze tussen: Discover (Alle foto's die zijn geupload op chronologische volgorde) en Friends (Alle foto's die de gebruikers die jij volgt op chronologische volgorde)
-- Een optie om uit te loggen, waarna je terugkeert naar de Welkompagina. 
+## Opzet van de website
+##### DISCOVERY:
+Je opent de website op de Discovery pagina zonder ingelogd of geregisteerd te zijn. Dit is om de gebruiker gelijk te laten zien hoe andere gebruikers op de website functioneren: je kunt gelijk foto's, comments en likes bekijken (maar zelf nog niets liken, commenten, volgen of uploaden. Hiervoor moet je ingelogd zijn. Wanneer je of bent ingelogd, of bent aangemeld keer je weer terug naar deze Discovery pagina. Nu kun je wel op foto's reageren, foto's liken en gebruikers volgen. Ook kun je wanneer je ingelogd bent naar de pagina 'upload' en de pagina 'friends'.
 ##### PROFIELPAGINA:
-Via de Discoverypagina kan je naar je eigen profielpagina. Hier vindt je:
-- Foto's die jij hebt geupload
-- Een optie om een foto te uploaden en hier een comment bij te schrijven
-- Een knopje met 'Friends', waar je kan zien wie jij allemaal volgt en wie jou volgt
-- Een optie om uit te loggen, waarna je terugkeert naar de Welkompagina.
-##### ACCOUNTPAGINA:
-Via 'Friends' kan je naar een accountpagina van een andere gebruiker. Hier vindt je foto's van deze gebruiker. 
+In de navigatiebalk van de website vindt je ook je eigen profielpagina. Hier staan de foto's die jij hebt geupload met de bijbehorende likes en comments. 
+##### GEBRUIKERSPAGINA:
+Wanneer je op de naam van een gebruiker klikt, kom je op zijn of haar gebruikerspagina. Hier vindt je alle foto's van deze gebruiker. Je kunt hier een gebruiker volgen door op de follow knop te drukken. 
 #### UITLOGGEN:
 Vanaf elke pagina vindt je rechtsboven de mogelijkheid om uit te loggen. Dan return je naar de welkompagina. 
 

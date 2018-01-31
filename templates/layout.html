@@ -16,11 +16,11 @@
         <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-        <title>PhotoCritics {% block title %}{% endblock %}</title>
+        <title>Picrits {% block title %}{% endblock %}</title>
 
         <style>
         body {
-            background-color: #323e71;
+            background-color: #3d4044;
         }
         </style>
 
@@ -38,7 +38,7 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
-                        <a class="navbar-brand" position="absolute" margin-left="auto" margin-right="auto" left="0" right="0" href="{{ url_for('index') }}"><span class="blue">PhotoCritics</span></a>
+                        <a class="navbar-brand" position="absolute" margin-left="auto" margin-right="auto" left="0" right="0" href="{{ url_for('index') }}"><img src="{{ url_for('static', filename='logo.png') }}" /></a>
                     </div>
                     <div class="collapse navbar-collapse" id="navbar">
                         {% if session.user_id %}

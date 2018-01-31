@@ -120,10 +120,12 @@ def gebruikerspagina(clickeduser, clickedname):
 
     photoprofile = db.execute("SELECT * FROM pics WHERE userid = :id ORDER BY picid DESC", id = clickeduser)
 
+    userinfo = db.execute("SELECT * FROM Accounts WHERE id = :id", id = clickeduser)
+
     followcheck = False
 
     if session.get("user_id") is not None:
-        result = db.execute("SELECT * FROM follow WHERE user_id = :userid AND following_id = :followingid", userid = session["user_id"], followingid = clickeduser )
+        result = db.execute("SELECT * FROM follow WHERE user_id = :userid AND following_id = :followingid", userid = session["user_id"], followingid = clickeduser)
         if result != []:
             followcheck = True
 
@@ -132,7 +134,7 @@ def gebruikerspagina(clickeduser, clickedname):
         eindfoto = photo["url"]
         eindcomment = photo["comment"]
         eindid = eindcomment = photo["picid"]
-    return render_template('gebruikerspagina.html', photoprofile=photoprofile, username = clickedname, clickeduser = clickeduser,followcheck = followcheck)
+    return render_template('gebruikerspagina.html', photoprofile=photoprofile, username = clickedname, clickeduser = clickeduser,followcheck = followcheck, userinfo = userinfo)
 
 @app.route("/discover", methods=["GET", "POST"])
 def discover():
@@ -184,7 +186,10 @@ def profielpagina():
     for photo in photoprofile:
         eindfoto = photo["url"]
         eindcomment = photo["comment"]
-    return render_template('profielpagina.html', photoprofile=photoprofile, user = userid)
+
+    userinfo = db.execute("SELECT * FROM Accounts WHERE id = :id", id = userid)
+
+    return render_template('profielpagina.html', photoprofile=photoprofile, user = userid, userinfo = userinfo)
 
 @app.route("/postcomment/<clickedpic>/<clickeduser>", methods=["GET", "POST"])
 @login_required
@@ -212,7 +217,10 @@ def profilegif():
         joined_url = hoofd_url + search_value + public_key
 
         data = json.loads(requests.get(joined_url).text)
-        gif_url = json.dumps(data["data"][0]["embed_url"])
+        gif_url = json.dumps(data["data"][0]["images"]["original"]["url"]).strip('"')
+
+        db.execute("UPDATE Accounts SET profilegif = :profilegif WHERE id = :id", profilegif = gif_url, id = session["user_id"])
+
         return render_template('profilegif.html', gif_url = gif_url)
 
 

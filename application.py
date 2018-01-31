@@ -55,25 +55,31 @@ def index():
 def imagepagina(clickedpic, clickeduser):
 
     clickedpic = int(clickedpic)
+    clickeduser = int(clickeduser)
 
     likecheck = False
+
+    result = []
 
     if session.get("user_id") is not None:
         result = db.execute("SELECT * FROM likes WHERE user_id = :user_id AND like_id = :like_id", user_id = session["user_id"], like_id = clickedpic )
         if result != []:
             likecheck = True
 
+    likecount = len(db.execute("SELECT * FROM likes WHERE like_id = :like_id",like_id = clickedpic ))
+
     photo = db.execute("SELECT * FROM pics WHERE picid = :id", id = clickedpic)
 
+    userlist = {}
     users = db.execute("SELECT username, id FROM Accounts")
-    user = ""
     for user in users:
-        if clickeduser == user["id"]:
-            userlist[clickeduser] = str(user["username"])
+            userlist[user["id"]] = str(user["username"])
+
+    username = userlist[clickeduser]
 
     comments = db.execute("SELECT * FROM comments WHERE picid= :picid", picid = clickedpic)
 
-    return render_template('imagepagina.html', photo=photo, username = user, clickedpic = clickedpic, clickeduser = clickeduser, comments = comments, likecheck = likecheck)
+    return render_template('imagepagina.html',likecount = likecount ,photo=photo, username = username, clickedpic = clickedpic, clickeduser = clickeduser, comments = comments, likecheck = likecheck, userlist = userlist)
 
 @app.route("/follow/<clickeduser>/<clickedname>", methods=["GET" , "POST"])
 @login_required
@@ -124,6 +130,8 @@ def gebruikerspagina(clickeduser, clickedname):
 
     followcheck = False
 
+    followcount = len(db.execute("SELECT * FROM follow WHERE following_id = :followingid",followingid = clickeduser))
+
     if session.get("user_id") is not None:
         result = db.execute("SELECT * FROM follow WHERE user_id = :userid AND following_id = :followingid", userid = session["user_id"], followingid = clickeduser)
         if result != []:
@@ -134,7 +142,7 @@ def gebruikerspagina(clickeduser, clickedname):
         eindfoto = photo["url"]
         eindcomment = photo["comment"]
         eindid = eindcomment = photo["picid"]
-    return render_template('gebruikerspagina.html', photoprofile=photoprofile, username = clickedname, clickeduser = clickeduser,followcheck = followcheck, userinfo = userinfo)
+    return render_template('gebruikerspagina.html', followcount = followcount, photoprofile=photoprofile, username = clickedname, clickeduser = clickeduser,followcheck = followcheck, userinfo = userinfo)
 
 @app.route("/discover", methods=["GET", "POST"])
 def discover():
@@ -192,9 +200,11 @@ def profielpagina():
         eindfoto = photo["url"]
         eindcomment = photo["comment"]
 
+    followcount = len(db.execute("SELECT * FROM follow WHERE following_id = :followingid",followingid = session["user_id"]))
+
     userinfo = db.execute("SELECT * FROM Accounts WHERE id = :id", id = userid)
 
-    return render_template('profielpagina.html', photoprofile=photoprofile, user = userid, userinfo = userinfo)
+    return render_template('profielpagina.html',followcount = followcount, photoprofile=photoprofile, user = userid, userinfo = userinfo)
 
 @app.route("/postcomment/<clickedpic>/<clickeduser>", methods=["GET", "POST"])
 @login_required

@@ -15,8 +15,9 @@
 
     <a class = "normaletekst">{{username}}'s pictures</a>
     <br></br>
-    <br></br>
-    <br></br>
+    <p>{{ followcount }} followers</p>
+    <br>
+    <br>
 
     <!---Als er een gebruiker is ingelogd, is er de mogelijkheid om te volgen dmv follow knop  --->
     {% if session.user_id %}

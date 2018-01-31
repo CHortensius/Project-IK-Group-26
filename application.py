@@ -42,7 +42,7 @@ db = SQL("sqlite:///accounts.db")
 
 @app.route("/")
 def index():
-
+    # Brengt gebruiker naar zijn feed als hij is ingelogd, anders naar de discoverpagina
     if session.get("user_id") is not None:
         return redirect(url_for('friendspagina'))
 
@@ -58,6 +58,7 @@ def imagepagina(clickedpic, clickeduser):
 
     result = []
 
+    # Controleert of de gebruiker deze foto geliked heeft
     if session.get("user_id") is not None:
         result = checkforlike(clickedpic)
         if result != []:
@@ -67,6 +68,7 @@ def imagepagina(clickedpic, clickeduser):
 
     photo = showphoto(clickedpic)
 
+    # Maakt een dictionary met welke username bij een id hoort
     userlist = makeuserlist()
 
     username = userlist[clickeduser]
@@ -78,12 +80,15 @@ def imagepagina(clickedpic, clickeduser):
 @app.route("/follow/<clickeduser>/<clickedname>", methods=["GET" , "POST"])
 @login_required
 def follow(clickeduser,clickedname):
+
+    # Controleert of de gebruiker dit account al volgt of niet
     result = checkforfollow(clickeduser)
     if result == []:
         followcheck = False
     else:
         followcheck = True
 
+    # Volgt of onvolgt dit account
     if followcheck == False:
         addfollower(clickeduser)
     elif followcheck == True:
@@ -94,14 +99,14 @@ def follow(clickeduser,clickedname):
 @app.route("/like/<clickeduser>/<clickedpic>", methods=["GET" , "POST"])
 @login_required
 def like(clickeduser, clickedpic):
+    # Controleert of de gebruiker deze foto al geliked heeft
     result = checkforlike(clickedpic)
-
-
     if result == []:
         likecheck = False
     else:
         likecheck = True
 
+    # Liket of onliket de foto
     if likecheck == False:
         addlike(clickedpic)
     elif likecheck == True:
@@ -114,6 +119,7 @@ def gebruikerspagina(clickeduser, clickedname):
 
     clickeduser = int(clickeduser)
 
+    # Gaat naar de profielpagina als dit de gebruiker zijn eigen pagina is
     if session.get("user_id") is not None:
         if session["user_id"] == clickeduser:
             return redirect(url_for("profielpagina"))
@@ -126,6 +132,7 @@ def gebruikerspagina(clickeduser, clickedname):
 
     followcount = len(countfollowers(clickeduser))
 
+    # Controleert of de gebruiker dit account volgt
     if session.get("user_id") is not None:
         result = checkforfollowers(clickeduser)
         if result != []:
@@ -146,14 +153,14 @@ def discover():
 @app.route("/friends", methods=["GET", "POST"])
 @login_required
 def friendspagina():
-
+    # Kijkt welke accounts de gebruiker volgt
     volgend = userfollows()
     volgerslijst = []
     for volgers in volgend:
         volgerslijst.append(volgers["following_id"])
 
     anyfollowing = False
-
+    #Controleert of de gebruiker minstens 1 accounts volgt
     if volgend != []:
         anyfollowing = True
 
@@ -167,7 +174,7 @@ def friendspagina():
 @app.route("/profielpagina", methods=["GET" , "POST"])
 @login_required
 def profielpagina():
-
+    # Kijkt welke foto's de gebruiker heeft gepost
     photoprofile = showphotosprofile()
     for photo in photoprofile:
         eindfoto = photo["url"]
@@ -182,6 +189,7 @@ def profielpagina():
 @app.route("/postcomment/<clickedpic>/<clickeduser>", methods=["GET", "POST"])
 @login_required
 def postcomment(clickedpic, clickeduser):
+    # Controleert of de gebruiker alle benodigde velden heeft ingevuld
     if not request.form.get("title"):
         return apology("must provide subject")
     if not request.form.get("comment"):
@@ -204,9 +212,10 @@ def profilegif():
         search_value = request.form.get("gifsearch")
         joined_url = hoofd_url + search_value + public_key
 
+        # Laat de gebruiker het eerste zoekresultaat zien
         data = json.loads(requests.get(joined_url).text)
         gif_url = json.dumps(data["data"][0]["images"]["original"]["url"]).strip('"')
-
+        # Zet deze gif als de gebruiker's profielfoto
         updateprofilegif(gif_url)
 
         return render_template('profilegif.html', gif_url = gif_url)
@@ -225,7 +234,7 @@ def upload():
         if not request.form.get("comment"):
             return apology("must provide description")
 
-
+        # definieert de uploadfolder
         UPLOAD_FOLDER = os.path.abspath("ImgurApi/")
         app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -233,12 +242,14 @@ def upload():
 
         f = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
 
+        # Slaat de geuploade foto op
         file.save(f)
         client_id= '978480f212b2fba'
         client_secret= secret_code
         refresh_token= '80ddfe566ccfc68403b632be352fa4c7bb53ad0e'
         access_token= 'f8abdffaf2902a85d6ebb44af4f4d2c010d095bd'
 
+        # Gebruikt de imgurPython plugin om de foto naar imgur te uploaden
         client = ImgurClient(client_id, client_secret, access_token, refresh_token)
         image = client.upload_from_path(f,anon=True)
         image_url = image["link"]
@@ -314,6 +325,7 @@ def register():
             return apology("Password doesn't match!")
 
         password = request.form.get("password")
+        # Encrypt het wachtwoord
         hash = sha256_crypt.hash(password)
 
         result = createaccount(hash)
@@ -331,8 +343,5 @@ def register():
 @app.route("/about", methods=["GET" , "POST"])
 def about():
      return render_template("about.html")
-
-
-
 
 # Groetjes, Cas, Sooph en Lex

@@ -213,7 +213,6 @@ def profilegif():
 
         data = json.loads(requests.get(joined_url).text)
         gif_url = json.dumps(data["data"][0]["embed_url"])
-        print(gif_url)
         return render_template('profilegif.html', gif_url = gif_url)
 
 

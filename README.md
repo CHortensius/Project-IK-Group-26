@@ -5,7 +5,7 @@
 Welkom bij PiCrits (PhotoCritics)! Een website waar je aan fotografie-skills kunt werken of andere fotografen kunt voorzien van de beste tips & tricks voor het maken van het perfecte shot. Picrits is handig voor iedereen die zich bezig houdt met fotografie: als hobby dan wel als professie. Door je foto hier te posten kunnen anderen je nog meer leren zodat je binnen no time het perfecte shot kunt schieten. Bovendien is het een platform waar je je creativiteit kan delen met liefhebbers. Het is een nieuw, origineel platform die aansluit bij de grote passie van fotografieliefhebbers wereldwijd. 
 
 ## Screenshot van de applicatie
-TO DO!
+![image](docs/screenshotwebsite.jpg)
 
 ## Features van de site
 ##### DISCOVERYPAGINA:

@@ -31,9 +31,6 @@ if app.config["DEBUG"]:
         response.headers["Pragma"] = "no-cache"
         return response
 
-# custom filter
-app.jinja_env.filters["usd"] = usd
-
 # configure session to use filesystem (instead of signed cookies)
 app.config["SESSION_FILE_DIR"] = mkdtemp()
 app.config["SESSION_PERMANENT"] = False
@@ -62,45 +59,42 @@ def imagepagina(clickedpic, clickeduser):
     result = []
 
     if session.get("user_id") is not None:
-        result = db.execute("SELECT * FROM likes WHERE user_id = :user_id AND like_id = :like_id", user_id = session["user_id"], like_id = clickedpic )
+        result = checkforlike(clickedpic)
         if result != []:
             likecheck = True
 
-    likecount = len(db.execute("SELECT * FROM likes WHERE like_id = :like_id",like_id = clickedpic ))
+    likecount = len(likecounts(clickedpic))
 
-    photo = db.execute("SELECT * FROM pics WHERE picid = :id", id = clickedpic)
+    photo = showphoto(clickedpic)
 
-    userlist = {}
-    users = db.execute("SELECT username, id FROM Accounts")
-    for user in users:
-            userlist[user["id"]] = str(user["username"])
+    userlist = makeuserlist()
 
     username = userlist[clickeduser]
 
-    comments = db.execute("SELECT * FROM comments WHERE picid= :picid", picid = clickedpic)
+    comments = showcomment(clickedpic)
 
     return render_template('imagepagina.html',likecount = likecount ,photo=photo, username = username, clickedpic = clickedpic, clickeduser = clickeduser, comments = comments, likecheck = likecheck, userlist = userlist)
 
 @app.route("/follow/<clickeduser>/<clickedname>", methods=["GET" , "POST"])
 @login_required
 def follow(clickeduser,clickedname):
-    result = db.execute("SELECT * FROM follow WHERE user_id = :userid AND following_id = :following_id", userid = session["user_id"], following_id = clickeduser )
+    result = checkforfollow(clickeduser)
     if result == []:
         followcheck = False
     else:
         followcheck = True
 
     if followcheck == False:
-        db.execute("INSERT INTO follow(user_id,following_id) VALUES(:user_id,:following_id)",user_id=session["user_id"],following_id=clickeduser)
+        addfollower(clickeduser)
     elif followcheck == True:
-        db.execute("DELETE FROM follow WHERE user_id = :user_id AND following_id = :following_id",user_id = session["user_id"],following_id = clickeduser)
+        deletefollower(clickeduser)
 
     return redirect(url_for('gebruikerspagina',clickeduser=clickeduser,clickedname = clickedname))
 
 @app.route("/like/<clickeduser>/<clickedpic>", methods=["GET" , "POST"])
 @login_required
 def like(clickeduser, clickedpic):
-    result = db.execute("SELECT * FROM likes WHERE user_id = :user_id AND like_id = :like_id", user_id = session["user_id"], like_id = clickedpic )
+    result = checkforlike(clickedpic)
 
 
     if result == []:
@@ -109,9 +103,9 @@ def like(clickeduser, clickedpic):
         likecheck = True
 
     if likecheck == False:
-        db.execute("INSERT INTO likes(user_id, like_id) VALUES(:user_id,:like_id)", user_id=session["user_id"], like_id=clickedpic)
+        addlike(clickedpic)
     elif likecheck == True:
-        db.execute("DELETE FROM likes WHERE user_id = :user_id AND like_id = :like_id",user_id = session["user_id"],like_id = clickedpic)
+        deletelike(clickedpic)
 
     return redirect(url_for('imagepagina',clickeduser=clickeduser,clickedpic = clickedpic))
 
@@ -124,87 +118,66 @@ def gebruikerspagina(clickeduser, clickedname):
         if session["user_id"] == clickeduser:
             return redirect(url_for("profielpagina"))
 
-    photoprofile = db.execute("SELECT * FROM pics WHERE userid = :id ORDER BY picid DESC", id = clickeduser)
+    photoprofile = showphotogebruiker(clickeduser)
 
-    userinfo = db.execute("SELECT * FROM Accounts WHERE id = :id", id = clickeduser)
+    userinfo = getuserinfo(clickeduser)
 
     followcheck = False
 
-    followcount = len(db.execute("SELECT * FROM follow WHERE following_id = :followingid",followingid = clickeduser))
+    followcount = len(countfollowers(clickeduser))
 
     if session.get("user_id") is not None:
-        result = db.execute("SELECT * FROM follow WHERE user_id = :userid AND following_id = :followingid", userid = session["user_id"], followingid = clickeduser)
+        result = checkforfollowers(clickeduser)
         if result != []:
             followcheck = True
 
-
-    for photo in photoprofile:
-        eindfoto = photo["url"]
-        eindcomment = photo["comment"]
-        eindid = eindcomment = photo["picid"]
+    showmultiplephotos(photoprofile)
     return render_template('gebruikerspagina.html', followcount = followcount, photoprofile=photoprofile, username = clickedname, clickeduser = clickeduser,followcheck = followcheck, userinfo = userinfo)
 
 @app.route("/discover", methods=["GET", "POST"])
 def discover():
-    photoprofile = db.execute("SELECT * FROM pics ORDER BY picid DESC")
-    users = db.execute("SELECT username, id FROM Accounts")
-    userlist = {}
-    for profile in photoprofile:
-        for user in users:
-            if profile["userid"] == user["id"]:
-                userlist[profile["userid"]] = user["username"]
+    photoprofile = showphotosdiscover()
+    users = selectusers()
+    userlist = makeuserlist()
 
-    for photo in photoprofile:
-        eindfoto = photo["url"]
-        eindcomment = photo["comment"]
-        eindid = eindcomment = photo["picid"]
+    showmultiplephotos(photoprofile)
     return render_template('discover.html', photoprofile=photoprofile, userlist = userlist)
 
 @app.route("/friends", methods=["GET", "POST"])
 @login_required
 def friendspagina():
 
-    volgend = db.execute("SELECT following_id from follow WHERE user_id = :userid", userid=session["user_id"])
+    volgend = userfollows()
     volgerslijst = []
     for volgers in volgend:
         volgerslijst.append(volgers["following_id"])
-    print(volgerslijst)
 
     anyfollowing = False
 
     if volgend != []:
         anyfollowing = True
 
-    photoprofile = db.execute("SELECT * FROM pics WHERE userid IN (:volgerslijst) ORDER BY picid DESC ", volgerslijst=volgerslijst)
-    users = db.execute("SELECT username, id FROM Accounts")
-    userlist = {}
-    for profile in photoprofile:
-        for user in users:
-            if profile["userid"] == user["id"]:
-                userlist[profile["userid"]] = user["username"]
+    photoprofile = showphotosfriends(volgerslijst)
+    users = selectusers()
+    userlist = makeuserlist()
 
-    for photo in photoprofile:
-        eindfoto = photo["url"]
-        eindcomment = photo["comment"]
-        eindid = eindcomment = photo["picid"]
+    showmultiplephotos(photoprofile)
     return render_template('friends.html', photoprofile=photoprofile, userlist = userlist, anyfollowing = anyfollowing)
 
 @app.route("/profielpagina", methods=["GET" , "POST"])
 @login_required
 def profielpagina():
 
-    userid = session["user_id"]
-    photoprofile = db.execute("SELECT * FROM pics WHERE userid = :id ORDER BY picid DESC", id = userid)
-    #comments = db.execute("SELECT comment FROM pics WHERE userid = :id", id = session["user_id"])
+    photoprofile = showphotosprofile()
     for photo in photoprofile:
         eindfoto = photo["url"]
         eindcomment = photo["comment"]
 
-    followcount = len(db.execute("SELECT * FROM follow WHERE following_id = :followingid",followingid = session["user_id"]))
+    followcount = len(countfollowersprofile())
 
-    userinfo = db.execute("SELECT * FROM Accounts WHERE id = :id", id = userid)
+    userinfo = getmyinfo()
 
-    return render_template('profielpagina.html',followcount = followcount, photoprofile=photoprofile, user = userid, userinfo = userinfo)
+    return render_template('profielpagina.html',followcount = followcount, photoprofile=photoprofile, userinfo = userinfo)
 
 @app.route("/postcomment/<clickedpic>/<clickeduser>", methods=["GET", "POST"])
 @login_required
@@ -214,7 +187,7 @@ def postcomment(clickedpic, clickeduser):
     if not request.form.get("comment"):
         return apology("must enter comment")
 
-    db.execute("INSERT INTO comments (userid, picid, comment, poscomment, negcomment, title) VALUES(:userid, :picid, :comment, :poscomment, :negcomment, :title)", userid = session["user_id"], picid = clickedpic, comment = request.form.get("comment"), poscomment = request.form.get("poscomment"), negcomment = request.form.get("negcomment"), title = request.form.get("title") )
+    showcommentfromuser(clickedpic)
 
     return redirect(url_for('imagepagina', clickedpic = clickedpic , clickeduser = clickeduser))
 
@@ -234,13 +207,13 @@ def profilegif():
         data = json.loads(requests.get(joined_url).text)
         gif_url = json.dumps(data["data"][0]["images"]["original"]["url"]).strip('"')
 
-        db.execute("UPDATE Accounts SET profilegif = :profilegif WHERE id = :id", profilegif = gif_url, id = session["user_id"])
+        updateprofilegif(gif_url)
 
         return render_template('profilegif.html', gif_url = gif_url)
 
-
     else:
         return render_template("profilegif.html")
+
 
 @app.route("/upload", methods=["GET", "POST"])
 @login_required
@@ -258,13 +231,6 @@ def upload():
 
         file = request.files["image"]
 
-        #if not file:
-            #return apology("I don't see an image here...")
-        #try:
-            #im=Image.open(file)
-        #except IOError:
-            #return apology("That's not an image!")
-
         f = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
 
         file.save(f)
@@ -275,9 +241,9 @@ def upload():
 
         client = ImgurClient(client_id, client_secret, access_token, refresh_token)
         image = client.upload_from_path(f,anon=True)
-
-        db.execute("INSERT INTO pics (userid, url, comment, title) VALUES(:userid, :url, :comment, :title)", userid=session["user_id"], url=image['link'], comment=request.form.get("comment"), title=request.form.get("title"))
-        picid = db.execute("SELECT picid FROM pics WHERE url = :url", url = image["link"])
+        image_url = image["link"]
+        uploadphoto(image_url)
+        picid = selectpicid(image_url)
 
         return redirect(url_for('imagepagina', clickedpic = picid[0]["picid"] , clickeduser = session["user_id"]))
 
@@ -303,7 +269,7 @@ def login():
             return apology("must provide password")
 
         # query database for username
-        rows = db.execute("SELECT * FROM Accounts WHERE username = :username", username=request.form.get("username"))
+        rows = usernamecheck()
 
         # ensure username exists and password is correct
         if len(rows) != 1 or not sha256_crypt.verify(request.form.get("password"), rows[0]["hash"]):
@@ -350,8 +316,7 @@ def register():
         password = request.form.get("password")
         hash = sha256_crypt.hash(password)
 
-        result = db.execute("INSERT INTO Accounts (username,hash) VALUES (:username, :hash)", \
-            username=request.form.get("username"), hash=hash)
+        result = createaccount(hash)
 
         if not result:
             return apology("Username already in use")

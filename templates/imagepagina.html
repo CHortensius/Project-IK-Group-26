@@ -28,7 +28,7 @@
     {% endif %}
 
 
-
+    <!---Een stukje JavaScript om de comments mogelijk te maken--->
     <script type="text/javascript">
     function unhide(clickedButton, divID) {
     var item = document.getElementById(divID);
@@ -43,20 +43,25 @@
     }}
     </script>
 
+    <!---Laat hier het aantal likes zien per foto--->
     <a class = "normaletekst" href="{{ url_for('gebruikerspagina',clickeduser=clickeduser, clickedname=username) }}">{{username}}</a>
     <br></br>
     <p>{{ likecount }} likes</p>
 
+    <!---Laat de foto, samen met de titel en beschrijving zien--->
     <p class = "normaletekst"><b>{{ photo[0]["title"] }}</b></p>
     <div class = "normaletekst"><div class = "normaletekst"><img src={{photo[0]["url"]}} alt="Foto 1" class = "img-rounded"></div></div>
     <p class = "beschrijving">{{photo[0]["comment"]}}</p>
 
+    <!---Laat hieronder alle comments zien die zijn gepost bij de desbetreffende foto--->
     <p><b>Comments</b></p>
     {% if session.user_id %}
+    <!--- Dit is een knop om een comment toe te voegen--->
     <input type="button" onclick="unhide(this, 'addcomment') " value="Add comment">
     <div class = "hidden" id = "addcomment">
         <form action="{{ url_for('postcomment', clickedpic = clickedpic, clickeduser = clickeduser) }}" method="post">
             <fieldset>
+                <!---We hebben 4 velden: titel, algemeen, positieve notes en negatieve notes.--->
                 <div class="form-group">
                     <input autocomplete="off" autofocus class="form-control" name="title" placeholder="Subject" type="text"/>
                 </div>
@@ -69,6 +74,7 @@
                 <div class="form-group">
                     <textarea rows="4" cols="50" name="negcomment" placeholder="Negative notes"></textarea>
                 </div>
+                <!---Dit is waar je de comment verstuurd zodat de comment opgeslagen wordt--->
                 <div class="form-group">
                     <button class="btn btn-default" type="submit">Submit</button>
                 </div>
@@ -80,6 +86,7 @@
         <br>
         <br>
         <br>
+        <!---Plus en minteken worden toegevoegd aan resp positief comment of negatief comment--->
         <a class = "link" href="{{ url_for('gebruikerspagina',clickeduser=comment["userid"], clickedname=userlist[comment["userid"]]) }}"><b>{{ userlist[comment["userid"]] }}</b></a>
         <p><b>{{ comment["title"] }}</b></p>
         <p>{{ comment["comment"] }}</p>

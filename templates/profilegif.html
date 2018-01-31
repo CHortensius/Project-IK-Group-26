@@ -8,12 +8,15 @@
     <form action="{{ url_for('profilegif') }}" method="post">
         <fieldset>
             <div class="form-group">
+                <!---Zoekbalk om binnen gifjes te zoeken op basis van trefwoord--->
                 <input autocomplete="off" autofocus class="form-control" name="gifsearch" placeholder="Search Your Giphy" type="text"/>
             </div>
             <div class="form-group">
+                <!---Submit button om de gekozen gif op te slaan als profielgif--->
                 <button class="btn btn-default" type="submit">Set profile picture</button>
             </div>
         </fieldset>
     </form>
+    <!---Laat het gifje hier zien--->
     <img src ="{{ gif_url }}" >
 {% endblock %}

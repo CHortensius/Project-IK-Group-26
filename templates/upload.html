@@ -5,9 +5,10 @@
 {% endblock %}
 
 {% block main %}
-     <a class = "normaletekst">Upload your image here!</a>
+     <p class = "normaletekst">Upload your image here!</a>
      <br></br>
-     <a class = "normaletekst">Don't forget to pick a title and a description for your picture</a>
+    <!---Plaintext om uit te leggen dat alle velden moeten worden ingevuld, anders apology--->
+     <p class = "normaletekst">Don't forget to pick a title and a description for your picture</a>
      <br></br>
      <br></br>
      <br></br>
@@ -17,12 +18,15 @@
         <input type="file" name="image" accept="image/*">
         </span>
         <br></br>
+
+        <!---Vraag om een titel en een beschrijving. Beschrijving zit een max. aantal tekens aan--->
         <div class="form-group">
             <input class="form-control" name="title" placeholder="Title"/>
         </div>
         <br></br>
         <textarea rows="4" cols="50" name="comment" placeholder="Description"></textarea>
         <br>
+        <!---Upload button waarna je wordt gestuurd naar je profielpagina--->
         <input type="submit" value="Upload your image" class="btn btn-primary">
     </form>
 {% endblock %}

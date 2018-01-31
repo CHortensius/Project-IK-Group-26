@@ -18,10 +18,12 @@
     <br></br>
     <br></br>
     <br></br>
+    <!---Geef hier het aantal volgers aan dmv followcount--->
     <p>{{ followcount }} followers</p>
     <br>
     <br>
 
+    <!---Geef de foto, titel en beschrijving bij de foto voor elke foto van de ingelogde gebruiker --->
     {% for photo in photoprofile %}
     <p class = "normaletekst"><b>{{photo["title"]}}</b></p>
     <div class = "normaletekst"><a href="{{ url_for('imagepagina',clickedpic=photo["picid"], clickeduser= user) }}" class = "rcorners2"><img src="{{photo["url"]}}" alt="Foto 1" class="img-rounded"></a></div>

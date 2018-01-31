@@ -6,15 +6,6 @@
 
 {% block main %}
     <style>
-    .rcorners {
-    border: 2px solid #000d33;
-    background: #f1f2ef;
-    }
-
-    .rcorners2 {
-    border: 2px solid #000d33;
-    }
-
     .hidden{
         display:none;
     }
@@ -50,9 +41,9 @@
     }}
     </script>
 
-    <p class = "rcorners"><b>{{ photo[0]["title"] }}</b></p>
-    <div class = "rcorners"><div class = "rcorners2"><img src={{photo[0]["url"]}} alt="Foto 1" class = "img-rounded"></div></div>
-    <p class = "rcorners">{{photo[0]["comment"]}}</p>
+    <p class = "normaletekst"><b>{{ photo[0]["title"] }}</b></p>
+    <div class = "normaletekst"><div class = "normaletekst"><img src={{photo[0]["url"]}} alt="Foto 1" class = "img-rounded"></div></div>
+    <p class = "beschrijving">{{photo[0]["comment"]}}</p>
 
     <p><b>Comments</b></p>
     {% if session.user_id %}

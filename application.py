@@ -85,7 +85,7 @@ def follow(clickeduser,clickedname):
 @app.route("/like/<clickeduser>/<clickedname>", methods=["GET" , "POST"])
 @login_required
 def like(clickeduser,clickedname):
-    result = db.execute("SELECT * FROM likes WHERE user_id = :userid AND like_id = :likeid", user_id = session["user_id"], like_id = clickeduser )
+    result = db.execute("SELECT * FROM likes WHERE user_id = :userid AND like_id = :likeid",userid = session["user_id"], likeid = clickeduser)
     if result == []:
         likecheck = False
     else:

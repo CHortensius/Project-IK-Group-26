@@ -5,16 +5,22 @@
 {% endblock %}
 
 {% block main %}
-    <a>Upload your image here</a>
+     <a class = "normaletekst">Upload your image here!</a>
+     <br></br>
+     <a class = "normaletekst">Don't forget to pick a title and a description for your picture</a>
+     <br></br>
+     <br></br>
+     <br></br>
+
     <form action="/upload" method="post" enctype="multipart/form-data" >
         <span class="btn btn-default btn-file">
-            Browse <input type="file" name="image" accept="image/*">
+        <input type="file" name="image" accept="image/*">
         </span>
-        <br>
+        <br></br>
         <div class="form-group">
             <input class="form-control" name="title" placeholder="Title"/>
         </div>
-        <br>
+        <br></br>
         <textarea rows="4" cols="50" name="comment" placeholder="Description"></textarea>
         <br>
         <input type="submit" value="Upload your image" class="btn btn-primary">

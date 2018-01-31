@@ -5,18 +5,8 @@
 {% endblock %}
 
 {% block main %}
-    <style>
-    .rcorners {
-    border: 2px solid #000d33;
-    background: #f1f2ef;
-    }
 
-    .rcorners2 {
-    border: 2px solid #000d33;
-    }
-    </style>
-
-    <a class = "rcorners">{{username}}'s pictures</a>
+    <a class = "normaletekst">{{username}}'s pictures</a>
     <br></br>
     <br></br>
     <br></br>
@@ -32,9 +22,9 @@
     {% endif %}
 
     {% for photo in photoprofile %}
-    <p class = "rcorners">{{photo["title"]}}</p>
-    <div class = "rcorners"><a href="{{ url_for('imagepagina',clickedpic=photo["picid"],clickeduser = clickeduser) }}" class = "rcorners2"><img src="{{photo["url"]}}" alt="Foto 1" class = "img-rounded"></a></div>
-    <p class = "rcorners">{{photo["comment"]}}</p>
+    <p class = "normaletekst">{{photo["title"]}}</p>
+    <div class = "normaletekst"><a href="{{ url_for('imagepagina',clickedpic=photo["picid"],clickeduser = clickeduser) }}" class = "rcorners2"><img src="{{photo["url"]}}" alt="Foto 1" class = "img-rounded"></a></div>
+    <p class = "beschrijving">{{photo["comment"]}}</p>
     <br></br>
     <br></br>
     {% endfor %}

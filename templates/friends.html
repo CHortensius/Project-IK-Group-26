@@ -5,32 +5,19 @@
 {% endblock %}
 
 {% block main %}
-    <style>
-    .rcorners {
-    border-radius: 25px;
-    border: 2px solid #000d33;
-    background: #f1f2ef;
-    padding: 20px;
-    }
-
-    .rcorners2 {
-    border-radius: 8px;
-    border: 2px solid #000d33;
-    }
-    </style>
 
     <form action="{{ url_for('profielpagina') }}" method="get" enctype="multipart/form-data" >
-    <a class = "rcorners">New Pictures</a>
+    <a class = "normaletekst">New Pictures</a>
     <br></br>
     <br></br>
     <br></br>
 
     {% for photo in photoprofile %}
-    <a class = "rcorners" href="{{ url_for('gebruikerspagina',clickeduser=photo["userid"], clickedname=userlist[photo["userid"]]) }}">{{ userlist[photo["userid"]] }}</a>
+    <a class = "link" href="{{ url_for('gebruikerspagina',clickeduser=photo["userid"], clickedname=userlist[photo["userid"]]) }}">{{ userlist[photo["userid"]] }}</a>
     <br></br>
-    <div class = "rcorners"><a href="{{ url_for('imagepagina',clickedpic=photo["picid"], clickeduser=photo["userid"]) }}" class = "rcorners2"><img src="{{photo["url"]}}" alt="Foto 1" class = "img-rounded"></a></div>
-    <p class = "rcorners"><b>{{photo["title"]}}</b></p>
-    <p class = "rcorners">{{photo["comment"]}}</p>
+    <p class = "normaletekst"><b>{{photo["title"]}}</b></p>
+    <div class = "normaletekst"><a href="{{ url_for('imagepagina',clickedpic=photo["picid"], clickeduser=photo["userid"]) }}" class = "rcorners2"><img src="{{photo["url"]}}" alt="Foto 1" class = "img-rounded"></a></div>
+    <p class = "beschrijving">{{photo["comment"]}}</p>
     <br></br>
     <br></br>
     {% endfor %}

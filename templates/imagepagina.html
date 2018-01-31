@@ -41,6 +41,10 @@
     }}
     </script>
 
+    <a class = "normaletekst" href="{{ url_for('gebruikerspagina',clickeduser=clickeduser, clickedname=username) }}">{{username}}</a>
+    <br></br>
+    <p>{{ likecount }} likes</p>
+
     <p class = "normaletekst"><b>{{ photo[0]["title"] }}</b></p>
     <div class = "normaletekst"><div class = "normaletekst"><img src={{photo[0]["url"]}} alt="Foto 1" class = "img-rounded"></div></div>
     <p class = "beschrijving">{{photo[0]["comment"]}}</p>
@@ -71,8 +75,19 @@
     </div>
     {% endif %}
     {% for comment in comments %}
+        <br>
+        <br>
+        <br>
+        <a class = "link" href="{{ url_for('gebruikerspagina',clickeduser=comment["userid"], clickedname=userlist[comment["userid"]]) }}"><b>{{ userlist[comment["userid"]] }}</b></a>
+        <p><b>{{ comment["title"] }}</b></p>
         <p>{{ comment["comment"] }}</p>
+        {% if comment["poscomment"] %}
+        <img src="{{ url_for('static', filename='plus.png') }}" />
         <p>{{ comment["poscomment"] }}</p>
+        {% endif %}
+        {% if comment["negcomment"] %}
+        <img src="{{ url_for('static', filename='min.png') }}" />
         <p>{{ comment["negcomment"] }}</p>
+        {% endif %}
     {% endfor %}
 {% endblock %}

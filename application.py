@@ -235,7 +235,7 @@ def upload():
             return apology("must provide description")
 
         # definieert de uploadfolder
-        UPLOAD_FOLDER = os.path.abspath("ImgurApi/")
+        UPLOAD_FOLDER = os.path.abspath("docs/")
         app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
         file = request.files["image"]

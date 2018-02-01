@@ -8,7 +8,7 @@ Welkom bij PiCrits (PhotoCritics)! Een website waar je aan fotografie-skills kun
 ![image](docs/screenshotwebsite.jpg)
 
 ## Productvideo
-![video]https://youtu.be/62vZKv-XcTM
+![https://youtu.be/62vZKv-XcTM]
 
 ## Features van de site
 ##### DISCOVERYPAGINA:

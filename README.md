@@ -7,6 +7,9 @@ Welkom bij PiCrits (PhotoCritics)! Een website waar je aan fotografie-skills kun
 ## Screenshot van de applicatie
 ![image](docs/screenshotwebsite.jpg)
 
+## Productvideo
+![video]https://youtu.be/62vZKv-XcTM
+
 ## Features van de site
 ##### DISCOVERYPAGINA:
 Je opent de website op de Discovery pagina zonder ingelogd of geregisteerd te zijn. Dit is om de gebruiker gelijk te laten zien hoe andere gebruikers op de website functioneren: je kunt gelijk foto's, comments en likes bekijken (maar zelf nog niets liken, commenten, volgen of uploaden. Hiervoor moet je ingelogd zijn. Wanneer je of bent ingelogd, of bent aangemeld keer je weer terug naar deze Discovery pagina. Nu kun je wel op foto's reageren, foto's liken en gebruikers volgen. Ook kun je wanneer je ingelogd bent naar de pagina 'upload' en de pagina 'friends'.
@@ -34,4 +37,5 @@ De repository zit als volgt in elkaar:
 - Application.py (Alle functies)
 - Helpers.py (SQL)
 - In de map 'Static' vindt je afbeeldingen (+ teken, - teken) en het bestand style.css 
+
  
